@@ -94,6 +94,7 @@ def quiz():
         st.session_state.step = "quiz"
         st.session_state.answers = {}
         st.session_state.category_scores = {category: 0 for question, options in questions for category, _ in options}
+        st.session_state.top_categories = []
 
     # Step 1: Take the Quiz
     if st.session_state.step == "quiz":
@@ -117,17 +118,20 @@ def quiz():
         # Only show the "Submit Quiz" button once all questions are answered
         if answered_count == len(questions):
             if st.button("Submit Quiz"):
+                # Calculate top categories after quiz submission
+                st.session_state.top_categories = sorted(st.session_state.category_scores.items(), key=lambda x: x[1], reverse=True)[:3]
                 st.session_state.step = "show_results"
                 st.rerun()
 
     # Step 2: Show Top 3 Categories
     elif st.session_state.step == "show_results":
-        # Sort categories by score and get top 3
-        top_categories = sorted(st.session_state.category_scores.items(), key=lambda x: x[1], reverse=True)[:3]
-        st.session_state.top_categories = top_categories
+        # Ensure top_categories is populated
+        if not st.session_state.top_categories:
+            st.error("Top categories not found. Please complete the quiz.")
+            st.stop()
 
         st.write("### Your top 3 spending categories are:")
-        for idx, (category, score) in enumerate(top_categories, 1):
+        for idx, (category, score) in enumerate(st.session_state.top_categories, 1):
             st.write(f"{idx}. **{category}** (Score: {score})")
 
         st.write("### Now, let's explore how much you spend on these categories.")
