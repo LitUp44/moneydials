@@ -131,11 +131,12 @@ def quiz():
     
         ideal_spending = {}
         for idx, (category, _) in enumerate(st.session_state.top_categories):
-            # Use a unique key for each category input
-            key = f"ideal_spending_{category}_{idx}"
+            # Create a unique key using both the category and the session ID or random ID
+            unique_key = f"ideal_spending_{category}_{idx}_{st.session_state.step}"
+    
             ideal_spending[category] = st.number_input(
                 f"Enter your ideal spending for **{category}** per month ($)", 
-                min_value=0, step=10, key=key
+                min_value=0, step=10, key=unique_key
             )
     
         if st.button("Continue to Actual Spending"):
