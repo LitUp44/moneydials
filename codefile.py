@@ -89,7 +89,7 @@ def quiz():
         ])
     ]
 
-    # Initialize session state
+     # Initialize session state
     if "step" not in st.session_state:
         st.session_state.step = "quiz"
         st.session_state.answers = {}
@@ -110,8 +110,7 @@ def quiz():
                 for opt_text, category in options:
                     if selected == opt_text:
                         st.session_state.answers[idx] = category
-                        if category:
-                            st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
+                        st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
                 answered_count += 1  # Increment the counter for each answered question
 
         # Only show the "Submit Quiz" button once all questions are answered
@@ -176,6 +175,8 @@ def quiz():
             st.session_state.clear()
             st.rerun()
 
+if __name__ == "__main__":
+    quiz()
 
 
 
