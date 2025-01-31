@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # Define quiz questions and categories
 def quiz():
@@ -89,12 +90,14 @@ def quiz():
         ])
     ]
 
-    # Initialize session state
+   # Initialize session state
     if "step" not in st.session_state:
         st.session_state.step = "quiz"
         st.session_state.answers = {}
         st.session_state.category_scores = {category: 0 for question, options in questions for category, _ in options}
         st.session_state.top_categories = []
+        st.session_state.ideal_spending = {}
+        st.session_state.actual_spending = {}
 
     # Step 1: Take the Quiz
     if st.session_state.step == "quiz":
@@ -120,48 +123,44 @@ def quiz():
             if st.button("Submit Quiz"):
                 # Calculate top categories after quiz submission
                 st.session_state.top_categories = sorted(st.session_state.category_scores.items(), key=lambda x: x[1], reverse=True)[:3]
-                st.session_state.step = "show_results"
+                st.session_state.step = "ask_ideal_spending"
                 st.rerun()
 
-    # Step 2: Show Top 3 Categories
-    elif st.session_state.step == "show_results":
-        # Ensure top_categories is populated
-        if not st.session_state.top_categories:
-            st.error("Top categories not found. Please complete the quiz.")
-            st.stop()
-
-        st.write("### Your top 3 spending categories are:")
-        for idx, (category, score) in enumerate(st.session_state.top_categories, 1):
-            st.write(f"{idx}. **{category}** (Score: {score})")
-
-        st.write("### Now, let's explore how much you spend on these categories.")
-
-        if st.button("Continue"):
-            st.session_state.step = "ask_ideal_spending"
-            st.rerun()
-
-    # Step 3: Ask for Ideal and Actual Spending for Top 3 Categories
+    # Step 2: Ask for Ideal Spending for Top 3 Categories
     elif st.session_state.step == "ask_ideal_spending":
-        st.write("### Please enter your ideal and actual spending for the top 3 categories:")
+        st.write("### Please enter your ideal spending for the top 3 categories:")
 
         ideal_spending = {}
-        actual_spending = {}
-
         for category, _ in st.session_state.top_categories:
             ideal_spending[category] = st.number_input(f"Enter your ideal spending for **{category}** per month ($)", min_value=0, step=10)
+
+        if st.button("Continue to Actual Spending"):
+            st.session_state.ideal_spending = ideal_spending
+            st.session_state.step = "ask_actual_spending"
+            st.rerun()
+
+    # Step 3: Ask for Actual Spending for Top 3 Categories
+    elif st.session_state.step == "ask_actual_spending":
+        st.write("### Please enter your actual spending for the top 3 categories:")
+
+        actual_spending = {}
+        for category, _ in st.session_state.top_categories:
             actual_spending[category] = st.number_input(f"Enter your actual spending for **{category}** per month ($)", min_value=0, step=10)
 
-        if st.button("See Results"):
-            st.session_state.ideal_spending = ideal_spending
+        if st.button("See Comparison"):
             st.session_state.actual_spending = actual_spending
             st.session_state.step = "show_comparison"
             st.rerun()
 
-    # Step 4: Show Spending Comparison
+    # Step 4: Show Spending Comparison and Bar Chart
     elif st.session_state.step == "show_comparison":
         st.write("### Spending Comparison for Your Top 3 Categories")
 
         total_difference = 0
+        ideal_values = []
+        actual_values = []
+        categories = []
+
         for category in st.session_state.top_categories:
             category_name = category[0]
             ideal = st.session_state.ideal_spending.get(category_name, 0)
@@ -181,11 +180,36 @@ def quiz():
 
             total_difference += difference
 
+            # Prepare data for the bar chart
+            categories.append(category_name)
+            ideal_values.append(min(ideal, 6))  # Ensure max value is 6
+            actual_values.append(min(actual, 6))  # Ensure max value is 6
+
+        # Display bar chart
+        fig, ax = plt.subplots()
+        bar_width = 0.35
+        index = range(len(categories))
+
+        bar1 = ax.bar(index, ideal_values, bar_width, label="Ideal Spending")
+        bar2 = ax.bar([p + bar_width for p in index], actual_values, bar_width, label="Actual Spending")
+
+        ax.set_xlabel("Categories")
+        ax.set_ylabel("Spending ($)")
+        ax.set_title("Comparison of Ideal vs. Actual Spending")
+        ax.set_xticks([p + bar_width / 2 for p in index])
+        ax.set_xticklabels(categories)
+        ax.legend()
+
+        st.pyplot(fig)
+
         st.write(f"### Total Difference: **${total_difference}**")
 
         if st.button("Restart Quiz"):
             st.session_state.clear()
             st.rerun()
+
+if __name__ == "__main__":
+    quiz()
 
 if __name__ == "__main__":
     quiz()
