@@ -185,22 +185,13 @@ def quiz():
             ideal_values.append(min(ideal, 6))  # Ensure max value is 6
             actual_values.append(min(actual, 6))  # Ensure max value is 6
 
-        # Display bar chart
-        fig, ax = plt.subplots()
-        bar_width = 0.35
-        index = range(len(categories))
-
-        bar1 = ax.bar(index, ideal_values, bar_width, label="Ideal Spending")
-        bar2 = ax.bar([p + bar_width for p in index], actual_values, bar_width, label="Actual Spending")
-
-        ax.set_xlabel("Categories")
-        ax.set_ylabel("Spending ($)")
-        ax.set_title("Comparison of Ideal vs. Actual Spending")
-        ax.set_xticks([p + bar_width / 2 for p in index])
-        ax.set_xticklabels(categories)
-        ax.legend()
-
-        st.pyplot(fig)
+        # Display bar chart using Streamlit's bar chart function
+        data = {
+            "Category": categories,
+            "Ideal Spending": ideal_values,
+            "Actual Spending": actual_values
+        }
+        st.bar_chart(data.set_index("Category"))
 
         st.write(f"### Total Difference: **${total_difference}**")
 
