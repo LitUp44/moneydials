@@ -96,11 +96,12 @@ if "step" not in st.session_state:
 if st.session_state.step == "quiz":
     st.title("📝 Money Dials Quiz - find out what motivates you with money!")
     
+    # Initialize answer counter
+    answered_count = 0
+    
     for idx, (question, options) in enumerate(questions):
         st.write(f"**{idx + 1}. {question}**")
-        
-        # Displaying the descriptive option text instead of the category
-        selected = st.radio(f"Q{idx + 1}", [opt[1] for opt in options], key=f"q{idx}", index=None)
+        selected = st.radio(f"Q{idx + 1}", [opt[0] for opt in options], key=f"q{idx}", index=None)
         
         if selected:
             for opt_text, category in options:
@@ -108,12 +109,14 @@ if st.session_state.step == "quiz":
                     st.session_state.answers[idx] = category
                     if category:
                         st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
+            answered_count += 1  # Increment the counter for each answered question
     
-    # Check if all questions are answered
-    if len(st.session_state.answers) == len(questions):
+    # Only show the "Submit Quiz" button once all questions are answered
+    if answered_count == len(questions):
         if st.button("Submit Quiz"):
             st.session_state.step = "show_results"
             st.rerun()
+
 
 # Step 2: Show Results (you can add this part based on your result logic)
 if st.session_state.step == "show_results":
