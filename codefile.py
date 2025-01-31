@@ -89,93 +89,94 @@ def quiz():
         ])
     ]
 
+    # Initialize session state
+    if "step" not in st.session_state:
+        st.session_state.step = "quiz"
+        st.session_state.answers = {}
+        st.session_state.category_scores = {}
 
-# Initialize session state
-if "step" not in st.session_state:
-    st.session_state.step = "quiz"
-    st.session_state.answers = {}
-    st.session_state.category_scores = {}
+    # Step 1: Take the Quiz
+    if st.session_state.step == "quiz":
+        st.title("📝 Money Dials Quiz - find out what motivates you with money!")
 
-# Step 1: Take the Quiz
-if st.session_state.step == "quiz":
-    st.title("📝 Money Dials Quiz - find out what motivates you with money!")
+        # Initialize answer counter
+        answered_count = 0
 
-    # Initialize answer counter
-    answered_count = 0
-    
-    for idx, (question, options) in enumerate(questions):
-        st.write(f"**{idx + 1}. {question}**")
-        selected = st.radio(f"Q{idx + 1}", [opt[1] for opt in options], key=f"q{idx}", index=None)  # Show longer text options
-        
-        if selected:
-            for opt_text, category in options:
-                if selected == opt_text:
-                    st.session_state.answers[idx] = category
-                    if category:
-                        st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
-            answered_count += 1  # Increment the counter for each answered question
-    
-    # Only show the "Submit Quiz" button once all questions are answered
-    if answered_count == len(questions):
-        if st.button("Submit Quiz"):
-            st.session_state.step = "show_results"
+        for idx, (question, options) in enumerate(questions):
+            st.write(f"**{idx + 1}. {question}**")
+            selected = st.radio(f"Q{idx + 1}", [opt[1] for opt in options], key=f"q{idx}", index=None)  # Show longer text options
+
+            if selected:
+                for opt_text, category in options:
+                    if selected == opt_text:
+                        st.session_state.answers[idx] = category
+                        if category:
+                            st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
+                answered_count += 1  # Increment the counter for each answered question
+
+        # Only show the "Submit Quiz" button once all questions are answered
+        if answered_count == len(questions):
+            if st.button("Submit Quiz"):
+                st.session_state.step = "show_results"
+                st.rerun()
+
+    # Step 2: Show Top Category Result
+    elif st.session_state.step == "show_results":
+        if st.session_state.category_scores:
+            top_category = max(st.session_state.category_scores, key=st.session_state.category_scores.get)
+        else:
+            top_category = "None (No strong preference detected)"
+
+        st.write(f"### Your top spending category is: **{top_category}** 🎉")
+        st.write("Now, let's explore how much you spend on this category.")
+
+        if st.button("Continue"):
+            st.session_state.top_category = top_category
+            st.session_state.step = "ask_ideal_spending"
             st.rerun()
 
-# Step 2: Show Top Category Result
-elif st.session_state.step == "show_results":
-    if st.session_state.category_scores:
-        top_category = max(st.session_state.category_scores, key=st.session_state.category_scores.get)
-    else:
-        top_category = "None (No strong preference detected)"
+    # Step 3: Ask for Ideal Spending
+    elif st.session_state.step == "ask_ideal_spending":
+        st.write(f"### How much would you *ideally* like to spend on **{st.session_state.top_category}** per month?")
+        ideal_spending = st.number_input("Enter your ideal amount ($)", min_value=0, step=10)
 
-    st.write(f"### Your top spending category is: **{top_category}** 🎉")
-    st.write("Now, let's explore how much you spend on this category.")
-    
-    if st.button("Continue"):
-        st.session_state.top_category = top_category
-        st.session_state.step = "ask_ideal_spending"
-        st.rerun()
+        if st.button("Next"):
+            st.session_state.ideal_spending = ideal_spending
+            st.session_state.step = "ask_actual_spending"
+            st.rerun()
 
-# Step 3: Ask for Ideal Spending
-elif st.session_state.step == "ask_ideal_spending":
-    st.write(f"### How much would you *ideally* like to spend on **{st.session_state.top_category}** per month?")
-    ideal_spending = st.number_input("Enter your ideal amount ($)", min_value=0, step=10)
+    # Step 4: Ask for Actual Spending
+    elif st.session_state.step == "ask_actual_spending":
+        st.write(f"### How much do you *actually* spend on **{st.session_state.top_category}** per month?")
+        actual_spending = st.number_input("Enter your actual amount ($)", min_value=0, step=10)
 
-    if st.button("Next"):
-        st.session_state.ideal_spending = ideal_spending
-        st.session_state.step = "ask_actual_spending"
-        st.rerun()
+        if st.button("See Results"):
+            st.session_state.actual_spending = actual_spending
+            st.session_state.step = "show_comparison"
+            st.rerun()
 
-# Step 4: Ask for Actual Spending
-elif st.session_state.step == "ask_actual_spending":
-    st.write(f"### How much do you *actually* spend on **{st.session_state.top_category}** per month?")
-    actual_spending = st.number_input("Enter your actual amount ($)", min_value=0, step=10)
+    # Step 5: Show Spending Comparison
+    elif st.session_state.step == "show_comparison":
+        ideal = st.session_state.ideal_spending
+        actual = st.session_state.actual_spending
+        difference = actual - ideal
 
-    if st.button("See Results"):
-        st.session_state.actual_spending = actual_spending
-        st.session_state.step = "show_comparison"
-        st.rerun()
+        st.write(f"### Spending Comparison for **{st.session_state.top_category}**")
+        st.write(f"💡 *Ideal Spending:* **${ideal}**")
+        st.write(f"💰 *Actual Spending:* **${actual}**")
 
-# Step 5: Show Spending Comparison
-elif st.session_state.step == "show_comparison":
-    ideal = st.session_state.ideal_spending
-    actual = st.session_state.actual_spending
-    difference = actual - ideal
+        if difference > 0:
+            st.write(f"🔴 You're spending **${difference} more** than your ideal budget.")
+        elif difference < 0:
+            st.write(f"🟢 You're spending **${abs(difference)} less** than you expected.")
+        else:
+            st.write("✅ Your spending perfectly aligns with your ideal budget!")
 
-    st.write(f"### Spending Comparison for **{st.session_state.top_category}**")
-    st.write(f"💡 *Ideal Spending:* **${ideal}**")
-    st.write(f"💰 *Actual Spending:* **${actual}**")
+        if st.button("Restart Quiz"):
+            st.session_state.clear()
+            st.rerun()
 
-    if difference > 0:
-        st.write(f"🔴 You're spending **${difference} more** than your ideal budget.")
-    elif difference < 0:
-        st.write(f"🟢 You're spending **${abs(difference)} less** than you expected.")
-    else:
-        st.write("✅ Your spending perfectly aligns with your ideal budget!")
 
-    if st.button("Restart Quiz"):
-        st.session_state.clear()
-        st.rerun()
 
 
 
