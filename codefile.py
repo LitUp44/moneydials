@@ -108,26 +108,22 @@ if st.session_state.step == "quiz":
                     st.session_state.answers[idx] = category
                     if category:
                         st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
-
+    
+    # Check if all questions are answered
     if len(st.session_state.answers) == len(questions):
         if st.button("Submit Quiz"):
             st.session_state.step = "show_results"
             st.rerun()
 
+# Step 2: Show Results (you can add this part based on your result logic)
+if st.session_state.step == "show_results":
+    st.title("🎉 Your Results!")
+    st.write("Here are the categories you resonate with most:")
 
-# Step 2: Show Top 3 Categories
-elif st.session_state.step == "show_results":
-    if st.session_state.category_scores:
-        # Get the top 3 categories
-        sorted_categories = sorted(st.session_state.category_scores.items(), key=lambda x: x[1], reverse=True)[:3]
-        st.write("### Your Top 3 Spending Categories:")
-        for i, (category, score) in enumerate(sorted_categories, 1):
-            st.write(f"{i}. **{category}** (Score: {score})")
-        st.write("Now, let's explore how much you'd ideally like to spend on these categories.")
-        
-        st.session_state.top_categories = [category for category, _ in sorted_categories]
-        st.session_state.step = "ask_ideal_spending"
-        st.rerun()
+    # Show the category scores or results logic here
+    for category, score in st.session_state.category_scores.items():
+        st.write(f"{category}: {score}")
+
 
 # Step 3: Ask for Ideal Spending for Top 3 Categories
 elif st.session_state.step == "ask_ideal_spending":
