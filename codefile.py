@@ -89,11 +89,11 @@ def quiz():
         ])
     ]
 
-     # Initialize session state
+    # Initialize session state
     if "step" not in st.session_state:
         st.session_state.step = "quiz"
         st.session_state.answers = {}
-        st.session_state.category_scores = {}
+        st.session_state.category_scores = {category: 0 for question, options in questions for category, _ in options}
 
     # Step 1: Take the Quiz
     if st.session_state.step == "quiz":
@@ -107,10 +107,11 @@ def quiz():
             selected = st.radio(f"Q{idx + 1}", [opt[1] for opt in options], key=f"q{idx}", index=None)  # Show longer text options
 
             if selected:
-                for opt_text, category in options:
+                # Track the selected answer
+                for category, opt_text in options:
                     if selected == opt_text:
-                        st.session_state.answers[idx] = category
-                        st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
+                        # Update category score
+                        st.session_state.category_scores[category] += 1
                 answered_count += 1  # Increment the counter for each answered question
 
         # Only show the "Submit Quiz" button once all questions are answered
