@@ -40,7 +40,7 @@ if st.session_state.current_question < len(questions):
             st.session_state.answers[st.session_state.current_question] = category
             st.session_state.category_scores[category] = st.session_state.category_scores.get(category, 0) + 1
             st.session_state.current_question += 1
-            st.experimental_rerun()
+            st.rerun()
 else:
     st.write("## Quiz Completed!")
     st.write("### Your Results:")
@@ -50,5 +50,5 @@ else:
         st.session_state.answers = {}
         st.session_state.current_question = 0
         st.session_state.category_scores = {}
-        st.experimental_rerun()
+        st.rerun()
 
