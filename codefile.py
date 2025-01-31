@@ -98,7 +98,9 @@ if st.session_state.step == "quiz":
     
     for idx, (question, options) in enumerate(questions):
         st.write(f"**{idx + 1}. {question}**")
-        selected = st.radio(f"Q{idx + 1}", [opt[0] for opt in options], key=f"q{idx}", index=None)
+        
+        # Displaying the descriptive option text instead of the category
+        selected = st.radio(f"Q{idx + 1}", [opt[1] for opt in options], key=f"q{idx}", index=None)
         
         if selected:
             for opt_text, category in options:
@@ -111,8 +113,6 @@ if st.session_state.step == "quiz":
         if st.button("Submit Quiz"):
             st.session_state.step = "show_results"
             st.rerun()
-
-# The rest of the code continues from here...
 
 
 # Step 2: Show Top 3 Categories
