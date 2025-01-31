@@ -126,18 +126,18 @@ def quiz():
                 st.rerun()
 
     # Step 2: Ask for Ideal Spending for Top 3 Categories
-elif st.session_state.step == "ask_ideal_spending":
-    st.write("### Please enter your ideal spending for the top 3 categories:")
+    elif st.session_state.step == "ask_ideal_spending":
+        st.write("### Please enter your ideal spending for the top 3 categories:")
 
-    ideal_spending = {}
-    for idx, (category, _) in enumerate(st.session_state.top_categories):
-        ideal_spending[category] = st.number_input(f"Enter your ideal spending for **{category}** per month ($)", 
+        ideal_spending = {}
+        for idx, (category, _) in enumerate(st.session_state.top_categories):
+            ideal_spending[category] = st.number_input(f"Enter your ideal spending for **{category}** per month ($)", 
                                                    min_value=0, step=10, key=f"ideal_{category}_{idx}")
 
-    if st.button("Continue to Actual Spending"):
-        st.session_state.ideal_spending = ideal_spending
-        st.session_state.step = "ask_actual_spending"
-        st.rerun()
+        if st.button("Continue to Actual Spending"):
+            st.session_state.ideal_spending = ideal_spending
+            st.session_state.step = "ask_actual_spending"
+            st.rerun()
 
     # Step 3: Ask for Actual Spending for Top 3 Categories
     elif st.session_state.step == "ask_actual_spending":
