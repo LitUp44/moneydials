@@ -120,57 +120,64 @@ def quiz():
                 st.session_state.step = "show_results"
                 st.rerun()
 
-    # Step 2: Show Top Category Result
+    # Step 2: Show Top 3 Categories
     elif st.session_state.step == "show_results":
-        if st.session_state.category_scores:
-            top_category = max(st.session_state.category_scores, key=st.session_state.category_scores.get)
-        else:
-            top_category = "None (No strong preference detected)"
+        # Sort categories by score and get top 3
+        top_categories = sorted(st.session_state.category_scores.items(), key=lambda x: x[1], reverse=True)[:3]
+        st.session_state.top_categories = top_categories
 
-        st.write(f"### Your top spending category is: **{top_category}** 🎉")
-        st.write("Now, let's explore how much you spend on this category.")
+        st.write("### Your top 3 spending categories are:")
+        for idx, (category, score) in enumerate(top_categories, 1):
+            st.write(f"{idx}. **{category}** (Score: {score})")
+
+        st.write("### Now, let's explore how much you spend on these categories.")
 
         if st.button("Continue"):
-            st.session_state.top_category = top_category
             st.session_state.step = "ask_ideal_spending"
             st.rerun()
 
-    # Step 3: Ask for Ideal Spending
+    # Step 3: Ask for Ideal and Actual Spending for Top 3 Categories
     elif st.session_state.step == "ask_ideal_spending":
-        st.write(f"### How much would you *ideally* like to spend on **{st.session_state.top_category}** per month?")
-        ideal_spending = st.number_input("Enter your ideal amount ($)", min_value=0, step=10)
+        st.write("### Please enter your ideal and actual spending for the top 3 categories:")
 
-        if st.button("Next"):
-            st.session_state.ideal_spending = ideal_spending
-            st.session_state.step = "ask_actual_spending"
-            st.rerun()
+        ideal_spending = {}
+        actual_spending = {}
 
-    # Step 4: Ask for Actual Spending
-    elif st.session_state.step == "ask_actual_spending":
-        st.write(f"### How much do you *actually* spend on **{st.session_state.top_category}** per month?")
-        actual_spending = st.number_input("Enter your actual amount ($)", min_value=0, step=10)
+        for category, _ in st.session_state.top_categories:
+            ideal_spending[category] = st.number_input(f"Enter your ideal spending for **{category}** per month ($)", min_value=0, step=10)
+            actual_spending[category] = st.number_input(f"Enter your actual spending for **{category}** per month ($)", min_value=0, step=10)
 
         if st.button("See Results"):
+            st.session_state.ideal_spending = ideal_spending
             st.session_state.actual_spending = actual_spending
             st.session_state.step = "show_comparison"
             st.rerun()
 
-    # Step 5: Show Spending Comparison
+    # Step 4: Show Spending Comparison
     elif st.session_state.step == "show_comparison":
-        ideal = st.session_state.ideal_spending
-        actual = st.session_state.actual_spending
-        difference = actual - ideal
+        st.write("### Spending Comparison for Your Top 3 Categories")
 
-        st.write(f"### Spending Comparison for **{st.session_state.top_category}**")
-        st.write(f"💡 *Ideal Spending:* **${ideal}**")
-        st.write(f"💰 *Actual Spending:* **${actual}**")
+        total_difference = 0
+        for category in st.session_state.top_categories:
+            category_name = category[0]
+            ideal = st.session_state.ideal_spending.get(category_name, 0)
+            actual = st.session_state.actual_spending.get(category_name, 0)
+            difference = actual - ideal
 
-        if difference > 0:
-            st.write(f"🔴 You're spending **${difference} more** than your ideal budget.")
-        elif difference < 0:
-            st.write(f"🟢 You're spending **${abs(difference)} less** than you expected.")
-        else:
-            st.write("✅ Your spending perfectly aligns with your ideal budget!")
+            st.write(f"**{category_name}:**")
+            st.write(f"💡 *Ideal Spending:* **${ideal}**")
+            st.write(f"💰 *Actual Spending:* **${actual}**")
+
+            if difference > 0:
+                st.write(f"🔴 You're spending **${difference} more** than your ideal budget.")
+            elif difference < 0:
+                st.write(f"🟢 You're spending **${abs(difference)} less** than you expected.")
+            else:
+                st.write("✅ Your spending perfectly aligns with your ideal budget!")
+
+            total_difference += difference
+
+        st.write(f"### Total Difference: **${total_difference}**")
 
         if st.button("Restart Quiz"):
             st.session_state.clear()
@@ -178,8 +185,3 @@ def quiz():
 
 if __name__ == "__main__":
     quiz()
-
-
-
-
-
