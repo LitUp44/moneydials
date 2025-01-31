@@ -125,15 +125,15 @@ def quiz():
                 st.session_state.step = "ask_ideal_spending"
                 st.rerun()
 
-    # Step 2: Ask for Ideal Spending for Top 3 Categories
+      # Step 2: Ask for Ideal Spending for Top 3 Categories
     elif st.session_state.step == "ask_ideal_spending":
         st.write("### Please enter your ideal spending for the top 3 categories:")
     
         ideal_spending = {}
         for idx, (category, _) in enumerate(st.session_state.top_categories):
-            # Create a unique key using both the category and the session ID or random ID
-            unique_key = f"ideal_spending_{category}_{idx}_{st.session_state.step}"
-    
+            # Ensure key uniqueness by appending an additional random session-based key or timestamp
+            unique_key = f"ideal_spending_{category}_{idx}_{st.session_state.step}_{str(st.session_state.get('unique_key', 0))}"
+            
             ideal_spending[category] = st.number_input(
                 f"Enter your ideal spending for **{category}** per month ($)", 
                 min_value=0, step=10, key=unique_key
@@ -142,6 +142,7 @@ def quiz():
         if st.button("Continue to Actual Spending"):
             st.session_state.ideal_spending = ideal_spending
             st.session_state.step = "ask_actual_spending"
+            st.session_state.unique_key = st.session_state.get("unique_key", 0) + 1  # Increment a unique counter
             st.rerun()
 
     # Step 3: Ask for Actual Spending for Top 3 Categories
