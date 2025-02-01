@@ -1,212 +1,194 @@
 import streamlit as st
 
-# Define quiz questions and categories
-def quiz():
-    st.title("Personality Quiz")
+# -----------------------------
+# Data Definitions
+# -----------------------------
 
-    questions = [
-        ("1. When it comes to lunch, what’s your preference?", [
-            ("Convenience", "Grab something quick and easy to save time"),
-            ("Experiences", "Try out a new restaurant or café every time"),
-            ("Health", "Meal-prep at home so I know it’s healthy"),
-            ("Relationships", "Meet a friend or family member for lunch")
-        ]),
-        ("2. It’s Saturday night! How do you like to spend it?", [
-            ("Generosity", "I love to host my friends or family."),
-            ("Experiences", "Plan a special experience like a concert."),
-            ("SelfImprovement", "Definitely work on a personal project."),
-            ("Freedom", "I like not having a set plan.")
-        ]),
-        ("3. How do you feel about traveling?", [
-            ("Travel", "Love it! I want to explore as many places as possible."),
-            ("Freedom", "Always happy with a weekend away to recharge."),
-            ("Health", "Any adventure with lots of hiking or sports works for me!"),
-            ("Luxury", "I love traveling in style and splurging on luxury experiences."),
-            ("Convenience", "Nah, not for me – lots to do at home!")
-        ]),
-        ("4. What’s your ideal work environment?", [
-            ("Freedom", "A job that allows me to work my own hours and in whichever location I choose."),
-            ("Relationships", "An office where I can meet new people and network."),
-            ("Travel", "Any job that lets me have long weekends for traveling or the occasional work from abroad."),
-            ("SelfImprovement", "Most important for me is feeling like I’m always improving my skills and developing.")
-        ]),
-        ("5. How do you approach fitness and health?", [
-            ("Convenience", "Convenience matters—I like online classes or easy workout options that fit my schedule."),
-            ("Health", "I’m happy to invest in a great gym or workout clothing/equipment."),
-            ("Relationships", "It’s more of a social thing; I love group classes or going with friends!"),
-            ("Experiences", "Fitness isn’t my main focus, but I love splurging on a wellness retreat or trying a new sport now and then.")
-        ]),
-        ("6. What do you spend the most 'splurge' money on every month?", [
-            ("Convenience", "Meal kits to make food easier, being able to take Ubers, someone to help with cleaning or any of the above."),
-            ("Travel", "Flights or trips, even if they’re short – I can’t get enough travel!"),
-            ("Health", "High-quality fitness classes, health foods, or wellness apps."),
-            ("SelfImprovement", "A hobby, course, or app that builds my skills."),
-            ("Experiences", "Doing something new and exciting – I like to explore wherever I am and find something unique to try.")
-        ]),
-        ("7. You come across a windfall of cash. What’s your first thought on how to use it?", [
-            ("Luxury", "No question - buy a luxury item I normally can’t afford."),
-            ("Experiences", "Wahoo more money to add to my 'fun' fund for experiences with friends."),
-            ("Freedom", "Straight to the bank! Best thing I can do is have more financial flexibility in the future."),
-            ("Generosity", "Wow - great opportunity to donate part of it to causes I care about!")
-        ]),
-        ("8. Which best describes your spending philosophy?", [
-            ("Luxury", "Focus on quality, even if it means spending a lot more."),
-            ("Experiences", "Money is best spent on experiences over stuff. I’ll scrimp unless I get to experience something new."),
-            ("SelfImprovement", "There’s no budget if it’s something that feels like it’s helping me grow and develop."),
-            ("Relationships", "Extra money goes to improving relationships and treating my loved ones."),
-            ("Travel", "Travel. All day. Everyday. I want to see the world.")
-        ]),
-        ("9. How do you typically approach learning or personal growth?", [
-            ("SelfImprovement", "I regularly take online courses or attend workshops."),
-            ("Travel", "I travel and experience new cultures to learn more about the world."),
-            ("Health", "I engage in self-care practices or focus on activities that support my mental and physical wellness."),
-            ("Relationships", "I attend networking events and connect with others who have similar goals.")
-        ]),
-        ("10. What’s one thing you’re willing to spend more on to treat others?", [
-            ("Generosity", "I love to host dinner or throw a fun party."),
-            ("Relationships", "Giving gifts or doing something special for a loved one."),
-            ("Luxury", "I’ll splurge on a high-end experience or something extravagant for them."),
-            ("Experiences", "Taking people on exciting adventures or trips.")
-        ]),
-        ("11. When it comes to your personal style, what’s most important?", [
-            ("Luxury", "The brand – I like to wear pieces that make an impression"),
-            ("Convenience", "Comfort and convenience; I don’t like to overthink it"),
-            ("Generosity", "Buying things that reflect my values, like eco-friendly or locally made products"),
-            ("Health", "Practicality, I like to be able to walk a lot or go to a workout class in my usual clothes")
-        ]),
-        ("12. If you could improve one area of your life, what would it be?", [
-            ("Convenience", "Freeing up more time for things I enjoy by automating daily tasks"),
-            ("Relationships", "Building stronger connections with friends, family, or a partner"),
-            ("Generosity", "Living more generously by giving more time or money to causes I care about"),
-            ("Freedom", "Increasing my ability to travel and explore new places regularly")
-        ]),
-        ("13. What’s your favourite way to celebrate a personal milestone?", [
-            ("Luxury", "Treat myself to something luxurious and indulgent"),
-            ("Travel", "Go on an exciting trip or adventure"),
-            ("Generosity", "Host a gathering to share the joy with friends or family"),
-            ("SelfImprovement", "Reflect on what I’ve achieved and set new goals for growth"),
-            ("Freedom", "Take a day off to enjoy the freedom to do whatever I want")
-        ])
-    ]
+# List of questions and answers
+# Each answer is a tuple: (category, answer_text)
+questions = [
+    ("1. When it comes to lunch, what’s your preference?", [
+        ("Convenience", "Grab something quick and easy to save time"),
+        ("Experiences", "Try out a new restaurant or café every time"),
+        ("Health", "Meal-prep at home so I know it’s healthy"),
+        ("Relationships", "Meet a friend or family member for lunch")
+    ]),
+    ("2. It’s Saturday night! How do you like to spend it?", [
+        ("Generosity", "I love to host my friends or family."),
+        ("Experiences", "Plan a special experience like a concert."),
+        ("SelfImprovement", "Definitely work on a personal project."),
+        ("Freedom", "I like not having a set plan.")
+    ]),
+    ("3. How do you feel about traveling?", [
+        ("Travel", "Love it! I want to explore as many places as possible."),
+        ("Freedom", "Always happy with a weekend away to recharge."),
+        ("Health", "Any adventure with lots of hiking or sports works for me!"),
+        ("Luxury", "I love traveling in style and splurging on luxury experiences."),
+        ("Convenience", "Nah, not for me – lots to do at home!")
+    ]),
+    ("4. What’s your ideal work environment?", [
+        ("Freedom", "A job that allows me to work my own hours and in whichever location I choose."),
+        ("Relationships", "An office where I can meet new people and network."),
+        ("Travel", "Any job that lets me have long weekends for traveling or the occasional work from abroad."),
+        ("SelfImprovement", "Most important for me is feeling like I’m always improving my skills and developing.")
+    ]),
+    ("5. How do you approach fitness and health?", [
+        ("Convenience", "Convenience matters—I like online classes or easy workout options that fit my schedule."),
+        ("Health", "I’m happy to invest in a great gym or workout clothing/equipment."),
+        ("Relationships", "It’s more of a social thing; I love group classes or going with friends!"),
+        ("Experiences", "Fitness isn’t my main focus, but I love splurging on a wellness retreat or trying a new sport now and then.")
+    ]),
+    ("6. What do you spend the most 'splurge' money on every month?", [
+        ("Convenience", "Meal kits to make food easier, being able to take Ubers, someone to help with cleaning or any of the above."),
+        ("Travel", "Flights or trips, even if they’re short – I can’t get enough travel!"),
+        ("Health", "High-quality fitness classes, health foods, or wellness apps."),
+        ("SelfImprovement", "A hobby, course, or app that builds my skills."),
+        ("Experiences", "Doing something new and exciting – I like to explore wherever I am and find something unique to try.")
+    ]),
+    ("7. You come across a windfall of cash. What’s your first thought on how to use it?", [
+        ("Luxury", "No question - buy a luxury item I normally can’t afford."),
+        ("Experiences", "Wahoo more money to add to my 'fun' fund for experiences with friends."),
+        ("Freedom", "Straight to the bank! Best thing I can do is have more financial flexibility in the future."),
+        ("Generosity", "Wow - great opportunity to donate part of it to causes I care about!")
+    ]),
+    ("8. Which best describes your spending philosophy?", [
+        ("Luxury", "Focus on quality, even if it means spending a lot more."),
+        ("Experiences", "Money is best spent on experiences over stuff. I’ll scrimp unless I get to experience something new."),
+        ("SelfImprovement", "There’s no budget if it’s something that feels like it’s helping me grow and develop."),
+        ("Relationships", "Extra money goes to improving relationships and treating my loved ones."),
+        ("Travel", "Travel. All day. Everyday. I want to see the world.")
+    ]),
+    ("9. How do you typically approach learning or personal growth?", [
+        ("SelfImprovement", "I regularly take online courses or attend workshops."),
+        ("Travel", "I travel and experience new cultures to learn more about the world."),
+        ("Health", "I engage in self-care practices or focus on activities that support my mental and physical wellness."),
+        ("Relationships", "I attend networking events and connect with others who have similar goals.")
+    ]),
+    ("10. What’s one thing you’re willing to spend more on to treat others?", [
+        ("Generosity", "I love to host dinner or throw a fun party."),
+        ("Relationships", "Giving gifts or doing something special for a loved one."),
+        ("Luxury", "I’ll splurge on a high-end experience or something extravagant for them."),
+        ("Experiences", "Taking people on exciting adventures or trips.")
+    ]),
+    ("11. When it comes to your personal style, what’s most important?", [
+        ("Luxury", "The brand – I like to wear pieces that make an impression"),
+        ("Convenience", "Comfort and convenience; I don’t like to overthink it"),
+        ("Generosity", "Buying things that reflect my values, like eco-friendly or locally made products"),
+        ("Health", "Practicality, I like to be able to walk a lot or go to a workout class in my usual clothes")
+    ]),
+    ("12. If you could improve one area of your life, what would it be?", [
+        ("Convenience", "Freeing up more time for things I enjoy by automating daily tasks"),
+        ("Relationships", "Building stronger connections with friends, family, or a partner"),
+        ("Generosity", "Living more generously by giving more time or money to causes I care about"),
+        ("Freedom", "Increasing my ability to travel and explore new places regularly")
+    ]),
+    ("13. What’s your favourite way to celebrate a personal milestone?", [
+        ("Luxury", "Treat myself to something luxurious and indulgent"),
+        ("Travel", "Go on an exciting trip or adventure"),
+        ("Generosity", "Host a gathering to share the joy with friends or family"),
+        ("SelfImprovement", "Reflect on what I’ve achieved and set new goals for growth"),
+        ("Freedom", "Take a day off to enjoy the freedom to do whatever I want")
+    ])
+]
 
-   # Initialize session state
-    if "step" not in st.session_state:
-        st.session_state.step = "quiz"
-        st.session_state.answers = {}
-        st.session_state.category_scores = {category: 0 for question, options in questions for category, _ in options}
-        st.session_state.top_categories = []
-        st.session_state.ideal_spending = {}
-        st.session_state.actual_spending = {}
+# Explanatory texts for each category.
+explanatory_texts = {
+    "Travel": """**Travel:** Travel is your top money dial!! You find joy in exploring new places and cultures, valuing experiences that broaden your horizons and love to create lasting memories. You prioritise using your money to see the world even if that means you need to save in other places. Amazing - keep exploring the world!""",
+    "Experiences": """**Experiences:** You have Experiences as a top money dial! It means you like to use your hard earned money to be able to do activities that bring you excitement and fulfilment, from concerts and adventures to simple moments that create meaningful stories. Your motto is likely: “let’s try something new”.""",
+    "Convenience": """**Convenience:** You have Convenience as a top money dial! Convenience is all about using money to save yourself time and reduce stress; streamlining your life so you can focus on what matters most. Whether that means taking ride shares instead of transport, ordering food, or hiring a cleaner - you aim to use money to make life as easy as possible.""",
+    "Luxury": """**Luxury:** You have Luxury as a top money dial! This means you appreciate high-quality items and experiences, value comfort, elegance, and the finer things in life. Nothing wrong with appreciating beauty in your life and really loving special things. Keep using your money to make your life luxurious!""",
+    "Relationships": """**Relationships:** You have Relationships as a top money dial! If relationships are your priority, that means you probably enjoy using money to spend time with your family and friends. Whether hosting a dinner, buying presents for every loved one or using money to help you free up time to see them - you put people above all else.""",
+    "SelfImprovement": """**Self-Improvement:** You have self-improvement as a top money dial! You like to invest in personal growth through education, skills, and tools that help you become the best version of yourself. Incredibly admirable - keep calm and carry on learning & growing!""",
+    "Health": """**Health & Wellness:** You have health & wellness as a top money dial! This means you value spending your cash on fitness, nutrition, and mental well-being to support a vibrant, balanced lifestyle. You know better than anyone that if we don’t have our health we don’t have anything. Keep getting those expensive workout classes and treating yourself to new gym clothes!""",
+    "Generosity": """**Generosity:** You have generosity as a top money dial! This means you find fulfilment in giving to others, whether through gifts, donations, or acts of kindness that make a positive impact. This is a lovely way to spend your hard earned money - keep finding ways to give money to causes and people you care about!""",
+    "Freedom": """**Freedom:** You have Freedom as a top money dial! The best way to use your money is to buy yourself flexibility, autonomy, and the ability to live life on your own terms. Whether the ability to work your own hours or change jobs as you please you like to be in control of your own time. Keep living free!"""
+}
 
-    # Step 1: Take the Quiz
-    if st.session_state.step == "quiz":
-        st.title("📝 Money Dials Quiz - find out what motivates you with money!")
+# -----------------------------
+# Session State Initialization
+# -----------------------------
+if "current_question" not in st.session_state:
+    st.session_state.current_question = 0
+if "scores" not in st.session_state:
+    # Initialize scores for every possible category that might appear.
+    all_categories = {
+        answer[0]
+        for _, answers in questions
+        for answer in answers
+    }
+    st.session_state.scores = {cat: 0 for cat in all_categories}
 
-        # Initialize answer counter
-        answered_count = 0
+# -----------------------------
+# App Navigation / Flow
+# -----------------------------
 
-        for idx, (question, options) in enumerate(questions):
-            st.write(f"**{idx + 1}. {question}**")
-            selected = st.radio(f"Q{idx + 1}", [opt[1] for opt in options], key=f"q{idx}", index=None)  # Show longer text options
-
-            if selected:
-                # Track the selected answer
-                for category, opt_text in options:
-                    if selected == opt_text:
-                        # Update category score
-                        st.session_state.category_scores[category] += 1
-                answered_count += 1  # Increment the counter for each answered question
-
-        # Only show the "Submit Quiz" button once all questions are answered
-        if answered_count == len(questions):
-            if st.button("Submit Quiz"):
-                # Calculate top categories after quiz submission
-                st.session_state.top_categories = sorted(st.session_state.category_scores.items(), key=lambda x: x[1], reverse=True)[:3]
-                st.session_state.step = "ask_ideal_spending"
-                st.rerun()
-
-      # Step 2: Ask for Ideal Spending for Top 3 Categories
-    elif st.session_state.step == "ask_ideal_spending":
-        st.write("### Please enter your ideal spending for the top 3 categories:")
+def show_question():
+    """Display the current question and its answer choices."""
+    st.title("What are your money dials?")
+    st.subheader("Where do you get the most JOY spending money?")
     
-        ideal_spending = {}
-        for idx, (category, _) in enumerate(st.session_state.top_categories):
-            # Ensure key uniqueness by appending an additional random session-based key or timestamp
-            unique_key = f"ideal_spending_{category}_{idx}_{st.session_state.step}_{str(st.session_state.get('unique_key', 0))}"
-            
-            ideal_spending[category] = st.number_input(
-                f"Enter your ideal spending for **{category}** per month ($)", 
-                min_value=0, step=10, key=unique_key
-            )
+    idx = st.session_state.current_question
+    question_text, answers = questions[idx]
     
-        if st.button("Continue to Actual Spending"):
-            st.session_state.ideal_spending = ideal_spending
-            st.session_state.step = "ask_actual_spending"
-            st.session_state.unique_key = st.session_state.get("unique_key", 0) + 1  # Increment a unique counter
-            st.rerun()
+    st.markdown(f"### {question_text}")
+    
+    # Create a radio selection for answer choices.
+    # We'll combine the answer text with its description.
+    options = [f"{answer[1]}" for answer in answers]
+    choice = st.radio("Select your answer:", options, key=f"question_{idx}")
+    
+    # When the user clicks "Next", update the scores and move to the next question.
+    if st.button("Next"):
+        # Find the category corresponding to the selected answer.
+        # (We match based on the answer text.)
+        for cat, answer_text in answers:
+            if answer_text == choice:
+                st.session_state.scores[cat] += 1
+                break
+        
+        st.session_state.current_question += 1
+        st.experimental_rerun()  # Rerun to update the UI.
 
-    # Step 3: Ask for Actual Spending for Top 3 Categories
-    elif st.session_state.step == "ask_actual_spending":
-        st.write("### Please enter your actual spending for the top 3 categories:")
+def show_results():
+    """Display the results page based on the accumulated scores."""
+    st.title("Understanding your money dials!")
+    
+    # Sort categories by score (highest first)
+    sorted_scores = sorted(
+        st.session_state.scores.items(), key=lambda item: item[1], reverse=True
+    )
+    
+    # Get top three categories.
+    top_categories = [cat for cat, score in sorted_scores if score > 0][:3]
+    
+    if not top_categories:
+        st.write("It looks like you did not answer any questions.")
+        return
+    
+    # Display the top money dial.
+    st.markdown(f"## Your top money dial is: **{top_categories[0]}**")
+    st.markdown(explanatory_texts.get(top_categories[0], ""))
+    
+    # If there are additional top money dials, display them.
+    if len(top_categories) > 1:
+        others = top_categories[1:]
+        others_str = " & ".join([f"**{cat}**" for cat in others])
+        st.markdown(f"### Your other top money dials are: {others_str}")
+        for cat in others:
+            st.markdown(explanatory_texts.get(cat, ""))
+    
+    # Optionally, you can add a restart button
+    if st.button("Restart Quiz"):
+        st.session_state.current_question = 0
+        # Reset scores
+        for cat in st.session_state.scores:
+            st.session_state.scores[cat] = 0
+        st.experimental_rerun()
 
-        actual_spending = {}
-        for category, _ in st.session_state.top_categories:
-            actual_spending[category] = st.number_input(f"Enter your actual spending for **{category}** per month ($)", min_value=0, step=10)
-
-        if st.button("See Comparison"):
-            st.session_state.actual_spending = actual_spending
-            st.session_state.step = "show_comparison"
-            st.rerun()
-
-    # Step 4: Show Spending Comparison and Bar Chart
-    elif st.session_state.step == "show_comparison":
-        st.write("### Spending Comparison for Your Top 3 Categories")
-
-        total_difference = 0
-        ideal_values = []
-        actual_values = []
-        categories = []
-
-        for category in st.session_state.top_categories:
-            category_name = category[0]
-            ideal = st.session_state.ideal_spending.get(category_name, 0)
-            actual = st.session_state.actual_spending.get(category_name, 0)
-            difference = actual - ideal
-
-            st.write(f"**{category_name}:**")
-            st.write(f"💡 *Ideal Spending:* **${ideal}**")
-            st.write(f"💰 *Actual Spending:* **${actual}**")
-
-            if difference > 0:
-                st.write(f"🔴 You're spending **${difference} more** than your ideal budget.")
-            elif difference < 0:
-                st.write(f"🟢 You're spending **${abs(difference)} less** than you expected.")
-            else:
-                st.write("✅ Your spending perfectly aligns with your ideal budget!")
-
-            total_difference += difference
-
-            # Prepare data for the bar chart
-            categories.append(category_name)
-            ideal_values.append(min(ideal, 6))  # Ensure max value is 6
-            actual_values.append(min(actual, 6))  # Ensure max value is 6
-
-        # Display bar chart using Streamlit's bar chart function
-        data = {
-            "Category": categories,
-            "Ideal Spending": ideal_values,
-            "Actual Spending": actual_values
-        }
-        st.bar_chart(data.set_index("Category"))
-
-        st.write(f"### Total Difference: **${total_difference}**")
-
-        if st.button("Restart Quiz"):
-            st.session_state.clear()
-            st.rerun()
-
-if __name__ == "__main__":
-    quiz()
-
-if __name__ == "__main__":
-    quiz()
+# -----------------------------
+# Main App Logic
+# -----------------------------
+if st.session_state.current_question < len(questions):
+    show_question()
+else:
+    show_results()
