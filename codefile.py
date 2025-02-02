@@ -1,5 +1,27 @@
 import streamlit as st
 
+def app_header():
+    """Display a header with the logo and app title that appears on every page."""
+    st.markdown(
+        """
+        <div style="display: flex; align-items: center; background-color: #f0f2f6; padding: 10px;">
+            <img src="logo.png" alt="Logo" style="height: 60px; margin-right: 10px;">
+            <h1 style="color: #333; margin: 0;">Money Dials App</h1>
+        </div>
+        """, unsafe_allow_html=True
+    )
+
+def styled_title_subtitle(title, subtitle, bg_color="#ADD8E6", title_color="white", subtitle_color="white"):
+    """Display a title and subtitle with a background color."""
+    st.markdown(
+        f"""
+        <div style="background-color: {bg_color}; padding: 15px; border-radius: 8px; text-align: center;">
+            <h1 style="color: {title_color}; margin: 0;">{title}</h1>
+            <h3 style="color: {subtitle_color}; margin-top: 5px;">{subtitle}</h3>
+        </div>
+        """, unsafe_allow_html=True
+    )
+
 # -----------------------------
 # Data Definitions (Quiz)
 # -----------------------------
@@ -139,6 +161,11 @@ if st.session_state.phase == "spending":
 
 def show_quiz():
     """Display the quiz questions one by one."""
+    # Display the persistent header.
+    app_header()
+    # Display the styled title and subtitle for the quiz.
+    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
+    
     st.title("What are your money dials?")
     st.subheader("Where do you get the most JOY spending money?")
     
@@ -160,6 +187,11 @@ def show_quiz():
 
 def show_quiz_results():
     """Display the results page based on the accumulated scores."""
+    # Display the persistent header.
+    app_header()
+    # Display the styled title and subtitle for the quiz.
+    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
+    
     st.title("Understanding your money dials!")
     
     # Sort categories by score (highest first)
@@ -227,6 +259,11 @@ def prepare_spending_phase():
 
 def show_spending_input():
     """Display input pages for ideal and actual spending for each top money dial."""
+    # Display the persistent header.
+    app_header()
+    # Display the styled title and subtitle for the quiz.
+    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
+    
     current_index = st.session_state.spending_index
     top_dials = st.session_state.top_dials
     current_dial = top_dials[current_index]
@@ -258,6 +295,11 @@ def show_spending_input():
 
 def show_final_results():
     """Display the final results with the three money dials and spending amounts plus a reference image."""
+    # Display the persistent header.
+    app_header()
+    # Display the styled title and subtitle for the quiz.
+    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
+    
     st.title("Your Money Dial Spending Summary")
     top_dials = st.session_state.top_dials
     spending_data = st.session_state.spending_data
