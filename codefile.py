@@ -4,7 +4,7 @@ def app_header():
     """Display a header with the logo, app title, and subtitle in a single colored block."""
     st.markdown(
         """
-        <div style="background-color: #f5724b; padding: 10px; text-align: centre; border-radius: 8px;">
+        <div style="background-color: #f5724b; padding: 10px; text-align: center; border-radius: 8px;">
             <img src="logo.png" alt="Logo" style="height: 60px; margin-bottom: 10px;">
             <h1 style="color: black; margin: 0;">What are your Money Dials?</h1>
             <p style="color: black; margin: 5px 0 0 0; font-size: 32px;">Where do you get the most JOY spending money?</p>
