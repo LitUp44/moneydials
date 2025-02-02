@@ -1,26 +1,17 @@
 import streamlit as st
 
 def app_header():
-    """Display a header with the logo and app title that appears on every page."""
+    """Display a header with the logo, app title, and subtitle in a single colored block."""
     st.markdown(
         """
-        <div style="display: flex; align-items: center; background-color: #f5724b; padding: 10px;">
-            <img src="logo.png" alt="Logo" style="height: 60px; margin-right: 10px;">
-            <h1 style="color: #333; margin: 0;">What are your Money Dials?</h1>
+        <div style="background-color: #f5724b; padding: 10px; text-align: center; border-radius: 8px;">
+            <img src="logo.png" alt="Logo" style="height: 60px; margin-bottom: 10px;">
+            <h1 style="color: black; margin: 0;">What are your Money Dials?</h1>
+            <p style="color: black; margin: 5px 0 0 0; font-size: 16px;">Where do you get the most JOY spending money?</p>
         </div>
         """, unsafe_allow_html=True
     )
 
-def styled_title_subtitle(title, subtitle, bg_color="#ffeae6", title_color="white", subtitle_color="white"):
-    """Display a title and subtitle with a background color."""
-    st.markdown(
-        f"""
-        <div style="background-color: {bg_color}; padding: 15px; border-radius: 8px; text-align: center;">
-            <h1 style="color: {title_color}; margin: 0;">{title}</h1>
-            <h3 style="color: {subtitle_color}; margin-top: 5px;">{subtitle}</h3>
-        </div>
-        """, unsafe_allow_html=True
-    )
 
 # -----------------------------
 # Data Definitions (Quiz)
@@ -163,8 +154,6 @@ def show_quiz():
     """Display the quiz questions one by one."""
     # Display the persistent header.
     app_header()
-    # Display the styled title and subtitle for the quiz.
-    styled_title_subtitle("Test", "Where do you get the most JOY spending money?")
 
     
     idx = st.session_state.current_question
@@ -187,8 +176,6 @@ def show_quiz_results():
     """Display the results page based on the accumulated scores."""
     # Display the persistent header.
     app_header()
-    # Display the styled title and subtitle for the quiz.
-    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
     
     st.title("Understanding your money dials!")
     
@@ -259,8 +246,6 @@ def show_spending_input():
     """Display input pages for ideal and actual spending for each top money dial."""
     # Display the persistent header.
     app_header()
-    # Display the styled title and subtitle for the quiz.
-    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
     
     current_index = st.session_state.spending_index
     top_dials = st.session_state.top_dials
@@ -295,8 +280,6 @@ def show_final_results():
     """Display the final results with the three money dials and spending amounts plus a reference image."""
     # Display the persistent header.
     app_header()
-    # Display the styled title and subtitle for the quiz.
-    styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
     
     st.title("Your Money Dial Spending Summary")
     top_dials = st.session_state.top_dials
