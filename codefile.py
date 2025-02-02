@@ -272,7 +272,7 @@ def show_final_results():
         st.markdown("---")
     
     st.subheader("Reference")
-    # Make sure 'reference_image.png' is in your repo or adjust the path as needed.
+    # Make sure 'MoneyDials.png' is in your repo or adjust the path as needed.
     st.image("reference_image.png", caption="Reference Image", use_column_width=True)
     
     if st.button("Restart All"):
