@@ -179,7 +179,7 @@ def show_quiz():
     """Display the quiz questions one by one."""
     # Display the persistent header.
     app_header()
-    quiz_subheader():
+    quiz_subheader()
     
     idx = st.session_state.current_question
     question_text, answers = questions[idx]
