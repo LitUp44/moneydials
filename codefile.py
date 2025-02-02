@@ -10,6 +10,14 @@ def app_header():
             <h1 style="color: #ffeae6; margin: 0;">What are your Money Dials?</h1>
             <p style="color: #ffeae6; margin: 5px 0 0 0; font-size: 32px;">Where do you get the most JOY spending money? Take the quiz and find out!</p>
         </div>
+
+         <style>
+        # Increase font size of radio button labels
+        div.row-widget.stRadio > div {
+            font-size: 20px;
+        }
+        </style>
+
         """, unsafe_allow_html=True
     )
 
