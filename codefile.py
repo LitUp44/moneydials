@@ -1,10 +1,10 @@
 import streamlit as st
 
 # -----------------------------
-# Data Definitions
+# Data Definitions (Quiz)
 # -----------------------------
 
-# List of questions and answers
+# List of quiz questions and answers.
 # Each answer is a tuple: (category, answer_text)
 questions = [
     ("1. When it comes to lunch, what’s your preference?", [
@@ -99,31 +99,47 @@ explanatory_texts = {
     "Luxury": """**Luxury:** You have Luxury as a top money dial! This means you appreciate high-quality items and experiences, value comfort, elegance, and the finer things in life. Nothing wrong with appreciating beauty in your life and really loving special things. Keep using your money to make your life luxurious!""",
     "Relationships": """**Relationships:** You have Relationships as a top money dial! If relationships are your priority, that means you probably enjoy using money to spend time with your family and friends. Whether hosting a dinner, buying presents for every loved one or using money to help you free up time to see them - you put people above all else.""",
     "SelfImprovement": """**Self-Improvement:** You have self-improvement as a top money dial! You like to invest in personal growth through education, skills, and tools that help you become the best version of yourself. Incredibly admirable - keep calm and carry on learning & growing!""",
-    "Health": """**Health & Wellness:** You have health & wellness as a top money dial! This means you value spending your cash on fitness, nutrition, and mental well-being to support a vibrant, balanced lifestyle. You know better than anyone that if we don’t have our health we don’t have anything. Keep getting those expensive workout classes and treating yourself to new gym clothes!""",
-    "Generosity": """**Generosity:** You have generosity as a top money dial! This means you find fulfilment in giving to others, whether through gifts, donations, or acts of kindness that make a positive impact. This is a lovely way to spend your hard earned money - keep finding ways to give money to causes and people you care about!""",
+    "Health": """**Health & Wellness:** You have health & wellness as a top money dial! You value spending your cash on fitness, nutrition, and mental well-being to support a vibrant, balanced lifestyle. You know better than anyone that if we don’t have our health we don’t have anything. Keep getting those expensive workout classes and treating yourself to new gym clothes!""",
+    "Generosity": """**Generosity:** You have generosity as a top money dial!  This means you find fulfilment in giving to others, whether through gifts, donations, or acts of kindness that make a positive impact. This is a lovely way to spend your hard earned money - keep finding ways to give money to causes and people you care about!""",
     "Freedom": """**Freedom:** You have Freedom as a top money dial! The best way to use your money is to buy yourself flexibility, autonomy, and the ability to live life on your own terms. Whether the ability to work your own hours or change jobs as you please you like to be in control of your own time. Keep living free!"""
 }
 
 # -----------------------------
-# Session State Initialization
+# Session State Initialization (for multi-page flow)
 # -----------------------------
-if "current_question" not in st.session_state:
-    st.session_state.current_question = 0
-if "scores" not in st.session_state:
-    # Initialize scores for every possible category that might appear.
-    all_categories = {
-        answer[0]
-        for _, answers in questions
-        for answer in answers
-    }
-    st.session_state.scores = {cat: 0 for cat in all_categories}
+if "phase" not in st.session_state:
+    # "quiz" → answering quiz questions.
+    # "spending" → entering spending amounts for each top dial.
+    # "final" → final results page.
+    st.session_state.phase = "quiz"
+
+if st.session_state.phase == "quiz":
+    if "current_question" not in st.session_state:
+        st.session_state.current_question = 0
+    if "scores" not in st.session_state:
+        # Initialize scores for every possible category.
+        all_categories = { answer[0] for _, answers in questions for answer in answers }
+        st.session_state.scores = {cat: 0 for cat in all_categories}
+
+# For spending input pages:
+if st.session_state.phase == "spending":
+    if "spending_index" not in st.session_state:
+        st.session_state.spending_index = 0  # index for the current money dial (0, 1, 2)
+    if "spending_data" not in st.session_state:
+        # Will store ideal and actual amounts for each dial.
+        st.session_state.spending_data = {}  # key: money dial name, value: dict with "ideal" and "actual"
+    if "spending_subphase" not in st.session_state:
+        # "ideal" or "actual" for the current money dial.
+        st.session_state.spending_subphase = "ideal"
+        
+# For final results, no extra state is needed.
 
 # -----------------------------
-# App Navigation / Flow
+# Page Functions
 # -----------------------------
 
-def show_question():
-    """Display the current question and its answer choices."""
+def show_quiz():
+    """Display the quiz questions one by one."""
     st.title("What are your money dials?")
     st.subheader("Where do you get the most JOY spending money?")
     
@@ -131,64 +147,109 @@ def show_question():
     question_text, answers = questions[idx]
     
     st.markdown(f"### {question_text}")
-    
-    # Create a radio selection for answer choices.
-    # We'll combine the answer text with its description.
-    options = [f"{answer[1]}" for answer in answers]
+    options = [f"{answer_text}" for _, answer_text in answers]
     choice = st.radio("Select your answer:", options, key=f"question_{idx}")
     
-    # When the user clicks "Next", update the scores and move to the next question.
     if st.button("Next"):
-        # Find the category corresponding to the selected answer.
-        # (We match based on the answer text.)
+        # Update the score for the selected answer.
         for cat, answer_text in answers:
             if answer_text == choice:
                 st.session_state.scores[cat] += 1
                 break
-        
         st.session_state.current_question += 1
-        st.rerun()  # Rerun to update the UI.
+        st.rerun()
 
-def show_results():
-    """Display the results page based on the accumulated scores."""
-    st.title("Understanding your money dials!")
-    
-    # Sort categories by score (highest first)
+def prepare_spending_phase():
+    """After the quiz is done, compute the top three money dials and transition to spending input."""
+    # Sort categories by score (highest first) and get top three (ignoring zeros).
     sorted_scores = sorted(
         st.session_state.scores.items(), key=lambda item: item[1], reverse=True
     )
-    
-    # Get top three categories.
     top_categories = [cat for cat, score in sorted_scores if score > 0][:3]
-    
     if not top_categories:
         st.write("It looks like you did not answer any questions.")
         return
+    st.session_state.top_dials = top_categories  # store the top 3 dials
+    # Initialize spending data for each dial.
+    for dial in top_categories:
+        st.session_state.spending_data[dial] = {"ideal": None, "actual": None}
+    st.session_state.phase = "spending"
+    st.session_state.spending_index = 0
+    st.session_state.spending_subphase = "ideal"
+    st.rerun()
+
+def show_spending_input():
+    """Display input pages for ideal and actual spending for each top money dial."""
+    current_index = st.session_state.spending_index
+    top_dials = st.session_state.top_dials
+    current_dial = top_dials[current_index]
+    subphase = st.session_state.spending_subphase
+
+    if subphase == "ideal":
+        st.title(f"Ideal Spending for {current_dial}")
+        st.subheader("How much would you ideally like to spend on this dial?")
+        ideal = st.number_input("Enter your ideal amount:", min_value=0.0, value=0.0, step=1.0, key=f"ideal_{current_dial}")
+        if st.button("Next"):
+            st.session_state.spending_data[current_dial]["ideal"] = ideal
+            # Switch to actual spending input for the same dial.
+            st.session_state.spending_subphase = "actual"
+            st.rerun()
+    elif subphase == "actual":
+        st.title(f"Actual Spending for {current_dial}")
+        st.subheader("How much do you currently spend on this dial?")
+        actual = st.number_input("Enter your current spending amount:", min_value=0.0, value=0.0, step=1.0, key=f"actual_{current_dial}")
+        if st.button("Next"):
+            st.session_state.spending_data[current_dial]["actual"] = actual
+            # Move to the next dial if available.
+            if current_index + 1 < len(top_dials):
+                st.session_state.spending_index += 1
+                st.session_state.spending_subphase = "ideal"
+            else:
+                # Finished input for all dials. Move to final results.
+                st.session_state.phase = "final"
+            st.rerun()
+
+def show_final_results():
+    """Display the final results with the three money dials and spending amounts plus a reference image."""
+    st.title("Your Money Dial Spending Summary")
+    top_dials = st.session_state.top_dials
+    spending_data = st.session_state.spending_data
+
+    for dial in top_dials:
+        st.markdown(f"### {dial}")
+        ideal = spending_data[dial]["ideal"]
+        actual = spending_data[dial]["actual"]
+        st.write(f"**Ideal Spending:** ${ideal:,.2f}")
+        st.write(f"**Actual Spending:** ${actual:,.2f}")
+        st.markdown(explanatory_texts.get(dial, ""))
+        st.markdown("---")
     
-    # Display the top money dial.
-    st.markdown(f"## Your top money dial is: **{top_categories[0]}**")
-    st.markdown(explanatory_texts.get(top_categories[0], ""))
+    st.subheader("Reference")
+    # Make sure 'reference_image.png' is in your repo or adjust the path as needed.
+    st.image("reference_image.png", caption="Reference Image", use_column_width=True)
     
-    # If there are additional top money dials, display them.
-    if len(top_categories) > 1:
-        others = top_categories[1:]
-        others_str = " & ".join([f"**{cat}**" for cat in others])
-        st.markdown(f"### Your other top money dials are: {others_str}")
-        for cat in others:
-            st.markdown(explanatory_texts.get(cat, ""))
-    
-    # Optionally, you can add a restart button
-    if st.button("Restart Quiz"):
-        st.session_state.current_question = 0
-        # Reset scores
-        for cat in st.session_state.scores:
-            st.session_state.scores[cat] = 0
+    if st.button("Restart All"):
+        # Clear all session state variables and restart.
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
         st.rerun()
 
 # -----------------------------
-# Main App Logic
+# Main App Logic (Page Flow)
 # -----------------------------
-if st.session_state.current_question < len(questions):
-    show_question()
-else:
-    show_results()
+if st.session_state.phase == "quiz":
+    # If we have not yet answered all quiz questions:
+    if st.session_state.current_question < len(questions):
+        show_quiz()
+    else:
+        # Quiz is done; prepare spending input phase.
+        # (This can be triggered by a button on a results page if you want.)
+        st.title("Understanding your money dials!")
+        st.markdown("Your quiz is complete. Click below to proceed to spending inputs.")
+        if st.button("Proceed to Spending Inputs"):
+            prepare_spending_phase()
+elif st.session_state.phase == "spending":
+    show_spending_input()
+elif st.session_state.phase == "final":
+    show_final_results()
+
