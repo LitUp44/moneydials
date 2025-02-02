@@ -4,14 +4,14 @@ def app_header():
     """Display a header with the logo and app title that appears on every page."""
     st.markdown(
         """
-        <div style="display: flex; align-items: center; background-color: #f0f2f6; padding: 10px;">
+        <div style="display: flex; align-items: center; background-color: #f5724b; padding: 10px;">
             <img src="logo.png" alt="Logo" style="height: 60px; margin-right: 10px;">
-            <h1 style="color: #333; margin: 0;">Money Dials App</h1>
+            <h1 style="color: #333; margin: 0;">What are your Money Dials?</h1>
         </div>
         """, unsafe_allow_html=True
     )
 
-def styled_title_subtitle(title, subtitle, bg_color="#ADD8E6", title_color="white", subtitle_color="white"):
+def styled_title_subtitle(title, subtitle, bg_color="#ffeae6", title_color="white", subtitle_color="white"):
     """Display a title and subtitle with a background color."""
     st.markdown(
         f"""
@@ -165,9 +165,7 @@ def show_quiz():
     app_header()
     # Display the styled title and subtitle for the quiz.
     styled_title_subtitle("What are your money dials?", "Where do you get the most JOY spending money?")
-    
-    st.title("What are your money dials?")
-    st.subheader("Where do you get the most JOY spending money?")
+
     
     idx = st.session_state.current_question
     question_text, answers = questions[idx]
