@@ -198,29 +198,44 @@ def show_quiz():
         st.rerun()
 
 def show_quiz_results():
-    """Display the results page based on the accumulated scores."""
-    # Display the persistent header.
-    app_header()
+    """Display the quiz results with the top money dial, a horizontal bar chart of all scores,
+    and the explanatory text for the 2nd and 3rd top money dials."""
+    app_header()  # Display the persistent header.
+    st.title("Understanding your Money Dials!")
     
-    st.title("Understanding your money dials!")
-    
-    # Sort categories by score (highest first)
+    # Sort the scores (assumed to be stored in st.session_state.scores) in descending order.
     sorted_scores = sorted(
         st.session_state.scores.items(), key=lambda item: item[1], reverse=True
     )
     
-    # Get top three categories.
+    # Get the top three categories with non-zero scores.
     top_categories = [cat for cat, score in sorted_scores if score > 0][:3]
     
     if not top_categories:
         st.write("It looks like you did not answer any questions.")
         return
     
-    # Display the top money dial.
+    # Display the top money dial and its explanatory text.
     st.markdown(f"## Your top money dial is: **{top_categories[0]}**")
     st.markdown(explanatory_texts.get(top_categories[0], ""))
     
-    # If there are additional top money dials, display them.
+    # Create a DataFrame from the scores dictionary.
+    data = pd.DataFrame(list(st.session_state.scores.items()), columns=["Money Dial", "Score"])
+    
+    # Create a horizontal bar chart with Altair.
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("Score:Q", title="Points"),
+        y=alt.Y("Money Dial:N", sort="-x", title="Money Dial"),
+        tooltip=["Money Dial", "Score"]
+    ).properties(
+        width=600,
+        height=400,
+        title="Money Dial Scores"
+    )
+    
+    st.altair_chart(chart, use_container_width=True)
+    
+    # Display the explanatory text for the 2nd and 3rd top money dials (if available).
     if len(top_categories) > 1:
         others = top_categories[1:]
         others_str = " & ".join([f"**{cat}**" for cat in others])
@@ -228,12 +243,10 @@ def show_quiz_results():
         for cat in others:
             st.markdown(explanatory_texts.get(cat, ""))
     
-    # Save the top dials in session state for the spending phase.
-    st.session_state.top_dials = top_categories
-    
-    # Button to move on to spending questions.
+    # Button to proceed to the spending inputs phase.
     if st.button("Proceed to Spending Inputs"):
-        # Initialize spending data for each dial.
+        # Save the top dials in session state and initialize spending data for each dial.
+        st.session_state.top_dials = top_categories
         st.session_state.spending_data = {dial: {"ideal": None, "actual": None} for dial in top_categories}
         st.session_state.phase = "spending"
         st.session_state.spending_index = 0
