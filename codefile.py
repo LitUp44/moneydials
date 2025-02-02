@@ -262,7 +262,7 @@ def show_quiz_results():
             st.markdown(explanatory_texts.get(cat, ""))
     
     # Button to proceed to the spending inputs phase.
-    if st.button("Proceed to Spending Inputs"):
+    if st.button("See how your spending compares!"):
         st.session_state.top_dials = top_categories
         st.session_state.spending_data = {dial: {"ideal": None, "actual": None} for dial in top_categories}
         st.session_state.phase = "spending"
