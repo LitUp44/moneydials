@@ -311,7 +311,7 @@ def show_spending_input():
     if subphase == "ideal":
         st.title(f"Ideal spending for {current_dial}")
         st.subheader(f"How much would you ideally like to allocate to {current_dial} per month or per year?")
-        ideal = st.number_input(min_value=0.0, value=0.0, step=1.0, key=f"ideal_{current_dial}")
+        ideal = st.number_input("Ideal amount:", min_value=0.0, value=0.0, step=1.0, key=f"ideal_{current_dial}")
         if st.button("Next"):
             st.session_state.spending_data[current_dial]["ideal"] = ideal
             # Switch to actual spending input for the same dial.
@@ -320,7 +320,7 @@ def show_spending_input():
     elif subphase == "actual":
         st.title(f"Actual spending for {current_dial}")
         st.subheader(f"If you had to guess, how much do you currently spend on {current_dial}?")
-        actual = st.number_input("Enter your current spending amount:", min_value=0.0, value=0.0, step=1.0, key=f"actual_{current_dial}")
+        actual = st.number_input("Current amount:", min_value=0.0, value=0.0, step=1.0, key=f"actual_{current_dial}")
         if st.button("Next"):
             st.session_state.spending_data[current_dial]["actual"] = actual
             # Move to the next dial if available.
