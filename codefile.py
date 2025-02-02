@@ -164,7 +164,7 @@ def show_quiz():
     # Display the persistent header.
     app_header()
     # Display the styled title and subtitle for the quiz.
-    styled_title_subtitle("Where do you get the most JOY spending money?")
+    styled_title_subtitle("Test", "Where do you get the most JOY spending money?")
 
     
     idx = st.session_state.current_question
