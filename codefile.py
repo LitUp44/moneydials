@@ -3,7 +3,7 @@ import streamlit as st
 def app_header():
     """Display a header with the logo, app title, and subtitle in a single colored block."""
     # Use st.image to display the logo first
-    st.image("alignedLogo.png", width=300)  # adjust width as needed
+    st.image("alignedLogo.png", width=700)  # adjust width as needed
     st.markdown(
         """
         <div style="background-color: #f5724b; padding: 10px; text-align: center; border-radius: 8px;">
