@@ -333,29 +333,58 @@ def show_spending_input():
             st.rerun()
 
 def show_final_results():
-    """Display the final results with the three money dials and spending amounts plus a reference image."""
+    """Display the final summary page with a stacked bar chart, a custom message, a horizontal rule, and a reference image."""
     # Display the persistent header.
     app_header()
-    
     st.title("Your Money Dial Spending Summary")
-    top_dials = st.session_state.top_dials
-    spending_data = st.session_state.spending_data
-
-    for dial in top_dials:
-        st.markdown(f"### {dial}")
-        ideal = spending_data[dial]["ideal"]
-        actual = spending_data[dial]["actual"]
-        st.write(f"**Ideal Spending:** ${ideal:,.2f}")
-        st.write(f"**Actual Spending:** ${actual:,.2f}")
-        st.markdown(explanatory_texts.get(dial, ""))
-        st.markdown("---")
     
+    # Prepare the data for the stacked bar chart.
+    # We assume st.session_state.top_dials is a list of the three top money dial names,
+    # and st.session_state.spending_data is a dictionary where each key (money dial) maps to a dict with keys "ideal" and "actual".
+    data = []
+    for dial in st.session_state.top_dials:
+        ideal = st.session_state.spending_data[dial]["ideal"]
+        actual = st.session_state.spending_data[dial]["actual"]
+        data.append({"Money Dial": dial, "Allocation": "Ideal", "Amount": ideal})
+        data.append({"Money Dial": dial, "Allocation": "Actual", "Amount": actual})
+    
+    df = pd.DataFrame(data)
+    
+    # Create a stacked bar chart using Altair.
+    # (Bars for each money dial are split by Allocation type: Ideal and Actual.)
+    chart = alt.Chart(df).mark_bar().encode(
+        x=alt.X("Money Dial:N", title="Money Dial",
+                sort=alt.EncodingSortField(field="Amount", op="sum", order="descending")),
+        y=alt.Y("sum(Amount):Q", title="Amount", axis=alt.Axis(format="d", tickMinStep=1)),
+        color=alt.Color("Allocation:N", title="Allocation",
+                        scale=alt.Scale(range=["#1f77b4", "#ff7f0e"])),  # adjust colours as desired
+        tooltip=["Money Dial", "Allocation", "Amount"]
+    ).properties(
+        width=600,
+        height=400,
+        title="Ideal vs. Actual Spending"
+    )
+    
+    st.altair_chart(chart, use_container_width=True)
+    
+    # Display the custom explanatory text.
+    st.markdown(
+        """
+        Not every dollar spent is created equal. Some money is going to go much further for us, 
+        helping us feel like we're living a life that is more or less in alignment with our values. 
+        The money dials is one exercise to help us think about how in alignment we currently feel with our spending!
+        """
+    )
+    
+    # Display a horizontal rule.
+    st.markdown("___")
+    
+    # Display the reference image.
     st.subheader("Reference")
-    # Make sure 'MoneyDials.png' is in your repo or adjust the path as needed.
-    st.image("MoneyDials.png", caption="Money Dials", use_container_width=True)
+    st.image("reference_image.png", caption="Reference Image", use_column_width=True)
     
+    # Optional: A button to restart the entire app.
     if st.button("Restart All"):
-        # Clear all session state variables and restart.
         for key in list(st.session_state.keys()):
             del st.session_state[key]
         st.rerun()
