@@ -235,12 +235,17 @@ def show_quiz_results():
     
     # Create a vertical bar chart with Altair.
     chart = alt.Chart(data).mark_bar(color="#682d24").encode(
-        x=alt.X("Money Dial:N",
-                title="Money Dial",
-                axis=alt.Axis(grid=False)),
-        y=alt.Y("Score:Q",
-                title="Points",
-                axis=alt.Axis(grid=False, format="d", tickMinStep=1))
+        x=alt.X(
+            "Money Dial:N",
+            title="Money Dial",
+            sort=alt.EncodingSortField(field="Score", op="sum", order="descending"),
+            axis=alt.Axis(grid=False)
+        ),
+        y=alt.Y(
+            "Score:Q",
+            title="Points",
+            axis=alt.Axis(grid=False, format="d", tickMinStep=1)
+        )
     ).properties(
         width=600,
         height=400,
