@@ -3,7 +3,7 @@ import streamlit as st
 st.markdown(
     """
     <style>
-    .stRadio label {
+    div[data-baseweb="radio"] label {
         font-size: 60px !important;
     }
     </style>
