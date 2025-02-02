@@ -147,7 +147,7 @@ def show_question():
                 break
         
         st.session_state.current_question += 1
-        st.experimental_rerun()  # Rerun to update the UI.
+        st.rerun()  # Rerun to update the UI.
 
 def show_results():
     """Display the results page based on the accumulated scores."""
@@ -183,7 +183,7 @@ def show_results():
         # Reset scores
         for cat in st.session_state.scores:
             st.session_state.scores[cat] = 0
-        st.experimental_rerun()
+        st.rerun()
 
 # -----------------------------
 # Main App Logic
