@@ -222,13 +222,16 @@ def show_quiz_results():
     st.markdown(explanatory_texts.get(top_categories[0], ""))
     
     # Create a DataFrame from the scores dictionary.
-    data = pd.DataFrame(list(st.session_state.scores.items()), columns=["Money Dial", "Score"])
+    data = pd.DataFrame(list(scores.items()), columns=["Money Dial", "Score"])
     
-    # Create a horizontal bar chart with Altair.
-    chart = alt.Chart(data).mark_bar().encode(
-        x=alt.X("Score:Q", title="Points"),
-        y=alt.Y("Money Dial:N", sort="-x", title="Money Dial"),
-        tooltip=["Money Dial", "Score"]
+    # Create a vertical bar chart with Altair.
+    chart = alt.Chart(data).mark_bar(color="#682d24").encode(
+        x=alt.X("Money Dial:N",
+                title="Money Dial",
+                axis=alt.Axis(grid=False)),
+        y=alt.Y("Score:Q",
+                title="Points",
+                axis=alt.Axis(grid=False, format="d", tickMinStep=1))
     ).properties(
         width=600,
         height=400,
