@@ -404,7 +404,7 @@ def show_final_results():
     
     # Display the reference image.
     st.subheader("Reference")
-    st.image("MoneyDials.png", caption="Reference Image", use_column_width=True)
+    st.image("MoneyDials.png", caption="Reference Image", use_container_width=True)
     
     # Optional: A button to restart the entire app.
     if st.button("Restart All"):
