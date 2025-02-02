@@ -199,16 +199,25 @@ def show_quiz():
         st.session_state.current_question += 1
         st.rerun()
 
+import pandas as pd
+import altair as alt
+import streamlit as st
+
 def show_quiz_results():
-    """Display the quiz results with the top money dial, a horizontal bar chart of all scores,
-    and the explanatory text for the 2nd and 3rd top money dials."""
-    app_header()  # Display the persistent header.
+    """Display the quiz results with the top money dial, a vertical bar chart of all scores,
+    and explanatory text for the 2nd and 3rd top money dials."""
+    app_header()  # persistent header
     st.title("Understanding your Money Dials!")
     
-    # Sort the scores (assumed to be stored in st.session_state.scores) in descending order.
-    sorted_scores = sorted(
-        st.session_state.scores.items(), key=lambda item: item[1], reverse=True
-    )
+    # Retrieve scores from session state; if not defined, provide an empty dict.
+    scores = st.session_state.get("scores", {})
+    
+    if not scores:
+        st.write("No scores found. It appears you have not completed the quiz.")
+        return
+
+    # Sort the scores in descending order.
+    sorted_scores = sorted(scores.items(), key=lambda item: item[1], reverse=True)
     
     # Get the top three categories with non-zero scores.
     top_categories = [cat for cat, score in sorted_scores if score > 0][:3]
@@ -250,13 +259,13 @@ def show_quiz_results():
     
     # Button to proceed to the spending inputs phase.
     if st.button("Proceed to Spending Inputs"):
-        # Save the top dials in session state and initialize spending data for each dial.
         st.session_state.top_dials = top_categories
         st.session_state.spending_data = {dial: {"ideal": None, "actual": None} for dial in top_categories}
         st.session_state.phase = "spending"
         st.session_state.spending_index = 0
         st.session_state.spending_subphase = "ideal"
         st.rerun()
+
 
 def prepare_spending_phase():
     """After the quiz is done, compute the top three money dials and transition to spending input."""
