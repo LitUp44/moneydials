@@ -14,7 +14,7 @@ def app_header():
          <style>
         # Increase font size of radio button labels
         div.row-widget.stRadio > div {
-            font-size: 20px;
+            font-size: 60px;
         }
         </style>
 
