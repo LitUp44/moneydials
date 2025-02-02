@@ -333,16 +333,21 @@ def show_spending_input():
             st.rerun()
 
 def show_final_results():
-    """Display the final summary page with a grouped bar chart, custom explanatory text,
-    a horizontal rule, and a reference image."""
+    """Display the final summary page with a grouped bar chart for the top 3 money dials,
+    a custom explanatory message, a horizontal rule, and a reference image."""
     
     # Display the persistent header.
     app_header()
     st.title("Your Money Dial Spending Summary")
     
+    # Ensure that top_dials is available.
+    if "top_dials" not in st.session_state:
+        st.error("Top money dials not found.")
+        return
+    
     # Prepare the data for the grouped bar chart.
-    # We assume st.session_state.top_dials is a list of the three top money dial names,
-    # and st.session_state.spending_data is a dictionary with keys "ideal" and "actual" for each dial.
+    # st.session_state.top_dials is a list of the three top money dial names in order.
+    # st.session_state.spending_data is a dictionary with keys "ideal" and "actual" for each dial.
     data = []
     for dial in st.session_state.top_dials:
         ideal = st.session_state.spending_data[dial]["ideal"]
@@ -353,19 +358,29 @@ def show_final_results():
     df = pd.DataFrame(data)
     
     # Create a grouped (side-by-side) bar chart using Altair.
-    # Note: xOffset is available in Altair v4+.
+    # Set the sort order of the Money Dial axis based on st.session_state.top_dials.
     chart = alt.Chart(df).mark_bar().encode(
-        # The x-axis shows the Money Dial categories.
-        x=alt.X("Money Dial:N", title="Money Dial", axis=alt.Axis(grid=False)),
+        # x-axis: Money Dial with sort order defined by top_dials.
+        x=alt.X("Money Dial:N", 
+                title="Money Dial", 
+                sort=st.session_state.top_dials,  # Use the explicit order from session state.
+                axis=alt.Axis(grid=False)
+        ),
         # xOffset separates the Ideal and Actual bars for each category.
         xOffset=alt.X("Allocation:N", title="Allocation"),
-        # The y-axis shows the Amount.
-        y=alt.Y("Amount:Q", title="Amount", axis=alt.Axis(grid=False, format="d", tickMinStep=1)),
-        # Colour encoding for the two types.
-        color=alt.Color("Allocation:N", scale=alt.Scale(
-            domain=["Ideal", "Actual"],
-            range=["#682d24", "#ff9e70"]
-        ), title="Allocation"),
+        # y-axis: Amount.
+        y=alt.Y("Amount:Q", 
+                title="Amount", 
+                axis=alt.Axis(grid=False, format="d", tickMinStep=1)
+        ),
+        # Color encoding for the two types with your custom colours.
+        color=alt.Color("Allocation:N", 
+                        scale=alt.Scale(
+                            domain=["Ideal", "Actual"],
+                            range=["#682d24", "#ff9e70"]
+                        ), 
+                        title="Allocation"
+        ),
         tooltip=["Money Dial", "Allocation", "Amount"]
     ).properties(
         width=200,  # width per group; adjust as needed
@@ -373,7 +388,6 @@ def show_final_results():
         title="Ideal vs. Actual Spending"
     )
     
-    # Display the chart.
     st.altair_chart(chart, use_container_width=True)
     
     # Display the custom explanatory text.
