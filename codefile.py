@@ -1,5 +1,16 @@
 import streamlit as st
 
+st.markdown(
+    """
+    <style>
+    .stRadio label {
+        font-size: 60px !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 def app_header():
     """Display a header with the logo, app title, and subtitle in a single colored block."""
     # Use st.image to display the logo first
@@ -10,13 +21,6 @@ def app_header():
             <h1 style="color: #ffeae6; margin: 0;">What are your Money Dials?</h1>
             <p style="color: #ffeae6; margin: 5px 0 0 0; font-size: 32px;">Where do you get the most JOY spending money? Take the quiz and find out!</p>
         </div>
-
-         <style>
-        # Increase font size of radio button labels
-        div.row-widget.stRadio > div {
-            font-size: 60px;
-        }
-        </style>
 
         """, unsafe_allow_html=True
     )
