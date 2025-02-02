@@ -207,7 +207,6 @@ def show_quiz_results():
     """Display the quiz results with the top money dial, a vertical bar chart of all scores,
     and explanatory text for the 2nd and 3rd top money dials."""
     app_header()  # persistent header
-    st.title("Understanding your Money Dials!")
     
     # Retrieve scores from session state; if not defined, provide an empty dict.
     scores = st.session_state.get("scores", {})
