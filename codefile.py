@@ -105,10 +105,11 @@ explanatory_texts = {
 }
 
 # -----------------------------
-# Session State Initialization (for multi-page flow)
+# Session State Initialization (for multi-phase flow)
 # -----------------------------
 if "phase" not in st.session_state:
     # "quiz" → answering quiz questions.
+    # "results" → showing the top money dials (quiz results) with explanatory text.
     # "spending" → entering spending amounts for each top dial.
     # "final" → final results page.
     st.session_state.phase = "quiz"
@@ -132,8 +133,6 @@ if st.session_state.phase == "spending":
         # "ideal" or "actual" for the current money dial.
         st.session_state.spending_subphase = "ideal"
         
-# For final results, no extra state is needed.
-
 # -----------------------------
 # Page Functions
 # -----------------------------
@@ -159,6 +158,46 @@ def show_quiz():
         st.session_state.current_question += 1
         st.rerun()
 
+def show_quiz_results():
+    """Display the results page based on the accumulated scores."""
+    st.title("Understanding your money dials!")
+    
+    # Sort categories by score (highest first)
+    sorted_scores = sorted(
+        st.session_state.scores.items(), key=lambda item: item[1], reverse=True
+    )
+    
+    # Get top three categories.
+    top_categories = [cat for cat, score in sorted_scores if score > 0][:3]
+    
+    if not top_categories:
+        st.write("It looks like you did not answer any questions.")
+        return
+    
+    # Display the top money dial.
+    st.markdown(f"## Your top money dial is: **{top_categories[0]}**")
+    st.markdown(explanatory_texts.get(top_categories[0], ""))
+    
+    # If there are additional top money dials, display them.
+    if len(top_categories) > 1:
+        others = top_categories[1:]
+        others_str = " & ".join([f"**{cat}**" for cat in others])
+        st.markdown(f"### Your other top money dials are: {others_str}")
+        for cat in others:
+            st.markdown(explanatory_texts.get(cat, ""))
+    
+    # Save the top dials in session state for the spending phase.
+    st.session_state.top_dials = top_categories
+    
+    # Button to move on to spending questions.
+    if st.button("Proceed to Spending Inputs"):
+        # Initialize spending data for each dial.
+        st.session_state.spending_data = {dial: {"ideal": None, "actual": None} for dial in top_categories}
+        st.session_state.phase = "spending"
+        st.session_state.spending_index = 0
+        st.session_state.spending_subphase = "ideal"
+        st.rerun()
+
 def prepare_spending_phase():
     """After the quiz is done, compute the top three money dials and transition to spending input."""
     # Sort categories by score (highest first) and get top three (ignoring zeros).
@@ -169,10 +208,18 @@ def prepare_spending_phase():
     if not top_categories:
         st.write("It looks like you did not answer any questions.")
         return
-    st.session_state.top_dials = top_categories  # store the top 3 dials
+    
+    # Save the top dials in session state.
+    st.session_state.top_dials = top_categories
+    
+    # Initialize spending_data if it doesn't exist.
+    if "spending_data" not in st.session_state:
+        st.session_state.spending_data = {}
+    
     # Initialize spending data for each dial.
     for dial in top_categories:
         st.session_state.spending_data[dial] = {"ideal": None, "actual": None}
+    
     st.session_state.phase = "spending"
     st.session_state.spending_index = 0
     st.session_state.spending_subphase = "ideal"
@@ -238,18 +285,16 @@ def show_final_results():
 # Main App Logic (Page Flow)
 # -----------------------------
 if st.session_state.phase == "quiz":
-    # If we have not yet answered all quiz questions:
     if st.session_state.current_question < len(questions):
         show_quiz()
     else:
-        # Quiz is done; prepare spending input phase.
-        # (This can be triggered by a button on a results page if you want.)
-        st.title("Understanding your money dials!")
-        st.markdown("Your quiz is complete. Click below to proceed to spending inputs.")
-        if st.button("Proceed to Spending Inputs"):
-            prepare_spending_phase()
+        # When all quiz questions are answered, show the results page.
+        show_quiz_results()
+
 elif st.session_state.phase == "spending":
     show_spending_input()
+
 elif st.session_state.phase == "final":
     show_final_results()
+
 
