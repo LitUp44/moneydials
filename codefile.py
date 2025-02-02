@@ -11,18 +11,30 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 def app_header():
-    """Display a header with the logo, app title, and subtitle in a single colored block."""
-    # Use st.image to display the logo first
-    st.image("alignedLogo.png", width=100)  # adjust width as needed
+    """Display a persistent header with the logo and main title."""
+    st.image("alignedLogo.png", width=700)  # Adjust width as needed.
     st.markdown(
         """
         <div style="background-color: #f5724b; padding: 10px; text-align: center; border-radius: 8px;">
             <h1 style="color: #ffeae6; margin: 0;">What are your Money Dials?</h1>
-            <p style="color: #ffeae6; margin: 5px 0 0 0; font-size: 32px;">Where do you get the most JOY spending money? Take the quiz and find out!</p>
         </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        """, unsafe_allow_html=True
+def quiz_subheader():
+    """Display the sub-header for the quiz only."""
+    st.markdown(
+        """
+        <div style="background-color: #f5724b; padding: 10px; text-align: center; border-radius: 8px;">
+            <p style="color: #ffeae6; margin: 5px 0 0 0; font-size: 32px;">
+                Where do you get the most JOY spending money? Take the quiz and find out!
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
 
@@ -167,7 +179,7 @@ def show_quiz():
     """Display the quiz questions one by one."""
     # Display the persistent header.
     app_header()
-
+    quiz_subheader():
     
     idx = st.session_state.current_question
     question_text, answers = questions[idx]
