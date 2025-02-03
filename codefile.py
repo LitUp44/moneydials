@@ -194,6 +194,7 @@ def show_quiz():
     if not st.session_state.get("quiz_started", False):
         # Quiz has not started: show the subheader and a 'Start Now' button.
         quiz_subheader()
+        st.markdown("<div style='padding-bottom: 20px;'></div>", unsafe_allow_html=True)
         if st.button("Start Now"):
             st.session_state.quiz_started = True
             st.rerun()
