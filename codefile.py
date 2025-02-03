@@ -177,27 +177,47 @@ if st.session_state.phase == "spending":
 # Page Functions
 # -----------------------------
 
+import streamlit as st
+
+# (Assuming you have your app_header() and quiz_subheader() functions defined.)
+
 def show_quiz():
-    """Display the quiz questions one by one."""
-    # Display the persistent header.
+    """Display the initial quiz page.
+    
+    Initially shows the header, subheader, and a 'Start Now' button.
+    Once the button is clicked, the quiz starts and the subheader is hidden.
+    """
+    # Always show the persistent header.
     app_header()
-    quiz_subheader()
     
-    idx = st.session_state.current_question
-    question_text, answers = questions[idx]
+    # Check if the quiz has started.
+    if not st.session_state.get("quiz_started", False):
+        # Quiz has not started: show the subheader and a 'Start Now' button.
+        quiz_subheader()
+        if st.button("Start Now"):
+            st.session_state.quiz_started = True
+            st.rerun()
+        return  # do not show any quiz questions yet.
     
-    st.markdown(f"### {question_text}")
-    options = [f"{answer_text}" for _, answer_text in answers]
-    choice = st.radio("Select your answer:", options, key=f"question_{idx}")
-    
-    if st.button("Next"):
-        # Update the score for the selected answer.
-        for cat, answer_text in answers:
-            if answer_text == choice:
-                st.session_state.scores[cat] += 1
-                break
-        st.session_state.current_question += 1
-        st.rerun()
+    # If quiz has started, only display the header (no subheader) and then the quiz questions.
+    # (Here we assume the quiz questions are managed via st.session_state.current_question.)
+    if st.session_state.current_question < len(questions):
+        # Display the current quiz question.
+        question_text, answers = questions[st.session_state.current_question]
+        st.markdown(f"### {question_text}")
+        options = [answer_text for _, answer_text in answers]
+        choice = st.radio("Select your answer:", options, key=f"question_{st.session_state.current_question}")
+        if st.button("Next"):
+            # Update the score for the selected answer.
+            for cat, answer_text in answers:
+                if answer_text == choice:
+                    st.session_state.scores[cat] += 1
+                    break
+            st.session_state.current_question += 1
+            st.rerun()
+    else:
+        # All questions answered, move on to the results phase.
+        show_quiz_results()
 
 import pandas as pd
 import altair as alt
