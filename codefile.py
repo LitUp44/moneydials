@@ -368,7 +368,8 @@ def show_spending_input():
 
 def show_final_results():
     """Display the final summary page with a grouped bar chart for the top 3 money dials,
-    a custom explanatory message, a horizontal rule, and a reference image."""
+    a custom explanatory message including insights based on spending differences,
+    a horizontal rule, and a reference image."""
     
     # Display the persistent header.
     app_header()
@@ -380,8 +381,6 @@ def show_final_results():
         return
     
     # Prepare the data for the grouped bar chart.
-    # st.session_state.top_dials is a list of the three top money dial names in order.
-    # st.session_state.spending_data is a dictionary with keys "ideal" and "actual" for each dial.
     data = []
     for dial in st.session_state.top_dials:
         ideal = st.session_state.spending_data[dial]["ideal"]
@@ -392,22 +391,17 @@ def show_final_results():
     df = pd.DataFrame(data)
     
     # Create a grouped (side-by-side) bar chart using Altair.
-    # Set the sort order of the Money Dial axis based on st.session_state.top_dials.
     chart = alt.Chart(df).mark_bar().encode(
-        # x-axis: Money Dial with sort order defined by top_dials.
         x=alt.X("Money Dial:N", 
                 title="Money Dial", 
                 sort=st.session_state.top_dials,  # Use the explicit order from session state.
                 axis=alt.Axis(grid=False)
         ),
-        # xOffset separates the Ideal and Actual bars for each category.
         xOffset=alt.X("Allocation:N", title="Allocation"),
-        # y-axis: Amount.
         y=alt.Y("Amount:Q", 
                 title="Amount", 
                 axis=alt.Axis(grid=False, format="d", tickMinStep=1)
         ),
-        # Color encoding for the two types with your custom colours.
         color=alt.Color("Allocation:N", 
                         scale=alt.Scale(
                             domain=["Ideal", "Actual"],
@@ -417,21 +411,41 @@ def show_final_results():
         ),
         tooltip=["Money Dial", "Allocation", "Amount"]
     ).properties(
-        width=200,  # width per group; adjust as needed
+        width=200,
         height=400,
         title="Ideal vs. Actual Spending"
     )
     
     st.altair_chart(chart, use_container_width=True)
     
-    # Display the custom explanatory text.
-    st.markdown(
-        """
-        Not every dollar spent is created equal. Some money is going to go much further for us, 
-        helping us feel like we're living a life that is more or less in alignment with our values. 
-        The money dials is one exercise to help us think about how in alignment we currently feel with our spending!
-        """
-    )
+    # ----- New Insight Calculation -----
+    # Count how many top money dials have ideal spending greater than actual spending.
+    count_ideal_gt_actual = 0
+    for dial in st.session_state.top_dials:
+        ideal = st.session_state.spending_data[dial]["ideal"]
+        actual = st.session_state.spending_data[dial]["actual"]
+        if ideal > actual:
+            count_ideal_gt_actual += 1
+
+    # Display the appropriate insight message based on the count.
+    if count_ideal_gt_actual >= 2:
+        st.markdown(
+            """
+            **Insight:**  
+            It looks like your ideal spending on your top money dials is more than how much you currently are.  
+            This is a great financial goal to work towards! It may not always be possible, but it's worth thinking about 
+            if you can free up money from somewhere you care about less to be able to spend more on these!
+            """
+        )
+    else:
+        st.markdown(
+            """
+            **Insight:**  
+            Wow - it looks like you already spend as much or more than you would like to on your top money dials!  
+            This is great, the goal is to get maximum satisfaction from your money and feel like you're able to really 
+            spend on the things you love.
+            """
+        )
     
     # Display a horizontal rule.
     st.markdown("___")
