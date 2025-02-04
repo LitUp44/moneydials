@@ -115,7 +115,7 @@ questions = [
     ]),
     ("10. What’s one thing you’re willing to spend more on to treat others?", [
         ("Generosity", "Hosting dinner or treating my friends to a night out."),
-        ("Convienence", "Getting them something to make their life easier; a baby-sitter or something they'll actually use."),
+        ("Convenience", "Getting them something to make their life easier; a baby-sitter or something they'll actually use."),
         ("Luxury", "Easy, I’ll splurge on something extravagant for them!"),
         ("Experiences", "I would usually get something we can do together"),
         ("None", "Something different!"),
