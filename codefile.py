@@ -456,6 +456,27 @@ def show_final_results():
     
     # Display a horizontal rule.
     st.markdown("___")
+
+    # After showing the results:
+    st.markdown("### Get a copy of your results by email:")
+    user_email = st.text_input("Enter your email address:")
+    if st.button("Send Email"):
+        # Build your email message. You can include results, charts (as links or attachments), etc.
+        email_subject = "Your Money Dial Results"
+        email_message = f"""
+        <html>
+            <body>
+                <h2>Your Money Dial Results</h2>
+                <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
+                <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
+                <!-- Add more details or even embed images if available -->
+                <hr>
+                <p>Thank you for taking the quiz!</p>
+            </body>
+        </html>
+        """
+        send_results_email(user_email, email_subject, email_message)
+        st.success("Your results have been emailed!")
     
     # Display the reference image.
     st.subheader("Reference")
@@ -466,6 +487,39 @@ def show_final_results():
         for key in list(st.session_state.keys()):
             del st.session_state[key]
         st.rerun()
+    
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import os
+
+def send_results_email(user_email, subject, message):
+    # Set up your SMTP server details
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587  # For TLS
+    sender_email = os.getenv("heather.litwiller@alignedfinances.com")  # Your email address from env variables
+    sender_password = os.getenv("Tobintoo2*")  # Your email password or app password
+
+    # Create a MIME message
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = user_email
+    msg["Subject"] = subject
+
+    # Attach the HTML or plain text message
+    msg.attach(MIMEText(message, "html"))  # You can use "plain" for plain text
+
+    try:
+        # Connect to the server and send the email
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()  # Secure the connection
+        server.login(sender_email, sender_password)
+        server.send_message(msg)
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print("Error sending email:", e)
 
 # -----------------------------
 # Main App Logic (Page Flow)
