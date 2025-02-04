@@ -429,7 +429,7 @@ def show_final_results():
     
     # Define the CSS style and HTML for the insight message.
     insight_style = (
-        '<div style="background-color: #e0f7fa; padding: 15px; border-radius: 5px; '
+        '<div style="background-color: #ff9e70; padding: 15px; border-radius: 5px; '
         'font-size: 20px; line-height: 1.5; margin-bottom: 20px;">'
     )
     
@@ -437,7 +437,7 @@ def show_final_results():
         insight_message = (
             insight_style +
             "<strong>Insight:</strong><br>"
-            "It looks like your you're spending less on your TOP money dials than you wish you were.  "
+            "It looks like your you're spending less in the areas you really care about than you wish you were.  "
             "This is a great financial goal to work towards! It may not always be possible, but it's worth thinking about "
             "if you can free up money from somewhere you care about less to be able to spend more on these!"
             "</div>"
@@ -447,8 +447,8 @@ def show_final_results():
             insight_style +
             "<strong>Insight:</strong><br>"
             "Wow - it looks like you already spend as much or more than you would like to on your top money dials!  "
-            "This is great, the goal is to get maximum satisfaction from your money and feel like you're able to really "
-            "spend on the things you love."
+            "This is generally very good, the goal is to get maximum satisfaction from your money and feel like you're able to really "
+            "spend on the things you love. One thing to think about is which money dials does your partner or loved ones have? Are you spending enough on these?"
             "</div>"
         )
     
