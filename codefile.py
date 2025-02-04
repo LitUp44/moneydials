@@ -230,12 +230,12 @@ def show_quiz():
                         st.session_state.scores[cat] += 1
                     break
             st.session_state.current_question += 1
-            st.experimental_rerun()
+            st.rerun()
     else:
         st.write("Quiz finished!")
         st.write("Scores:", st.session_state.scores)
 
-show_quiz()
+# show_quiz()
 
 def show_quiz_results():
     """Display the quiz results with the top money dial, a vertical bar chart of all scores,
