@@ -51,7 +51,7 @@ questions = [
         ("Convenience", "Grab something quick and easy to save time"),
         ("Experiences", "Try out a new spot nearby!"),
         ("Health", "Meal-prep at home so I know it’s healthy"),
-        ("Relationships", "Doesn't matter as long as I have a friend to eat with!")
+        ("Relationships", "Doesn't matter as long as I have a friend to eat with!"),
         ("None", "Mmm... none of the above really fits!")
     ]),
     ("2. It’s Saturday night! How do you like to spend it?", [
