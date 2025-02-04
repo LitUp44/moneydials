@@ -57,7 +57,7 @@ questions = [
     ("2. It’s Saturday night! How do you like to spend it?", [
         ("Generosity", "Easy - I love to play host for my friends or family."),
         ("Experiences", "Get to do something cool - like a concert or a play."),
-        ("SelfImprovement", "Work on a project; Saturday night crafts has a great ring to it."),
+        ("Self Improvement", "Work on a project; Saturday night crafts has a great ring to it."),
         ("Freedom", "I like not having a set plan and deciding last minute."),
         ("None", "I like to do something else!")
     ]),
@@ -73,7 +73,7 @@ questions = [
         ("Freedom", "A job that allows me to work my own hours, in whichever location I choose."),
         ("Relationships", "An office where I can meet new people and network."),
         ("Travel", "Any job that lets me have long weekends away or the occasional work from abroad."),
-        ("SelfImprovement", "Anywhere, as long as I’m always learning and developing."),
+        ("Self Improvement", "Anywhere, as long as I’m always learning and developing."),
         ("None", "None of the above"),
     ]),
     ("5. How do you use money to approach fitness and health?", [
@@ -87,7 +87,7 @@ questions = [
         ("Convenience", "Making my life easier - meal kits, Ubers, help with cleaning, or any combo of the above."),
         ("Travel", "Flights or trips, even if they’re short – I love to get away!"),
         ("Health", "My health. Gym membership, quality food, workout clothes."),
-        ("SelfImprovement", "My hobbies! I like to invest in things I'm learning / working on."),
+        ("Self Improvement", "My hobbies! I like to invest in things I'm learning / working on."),
         ("Experiences", "Experiences. I like to use my money to feel I've done soemthing different than usual."),
         ("None", "Something else!")
     ]),
@@ -101,13 +101,13 @@ questions = [
     ("8. Which best describes your spending philosophy?", [
         ("Luxury", "Quality, even if it means spending a lot more."),
         ("Experiences", "Easy - experiences over stuff."),
-        ("SelfImprovement", "There’s no budget if it helps me learn and grow."),
+        ("Self Improvement", "There’s no budget if it helps me learn and grow."),
         ("Relationships", "I would usually use it to treat my loved ones."),
         ("Travel", "Straight to the vacation fund."),
         ("None", "None of these are really 'me'!")
     ]),
     ("9. How do you typically approach learning or personal growth?", [
-        ("SelfImprovement", "I try to carve out the time daily or monthly to learn something new."),
+        ("Self Improvement", "I try to carve out the time daily or monthly to learn something new."),
         ("Travel", "I usually prefer learning about new places, languages or cultures"),
         ("Health", "I focus on self-care practices and my mental and physical wellness."),
         ("Relationships", "I learn through people, whether meeting new people or learning from people already in my life."),
@@ -138,7 +138,7 @@ questions = [
     ("13. What’s your favourite way to celebrate a personal milestone?", [
         ("Luxury", "Treat myself to something luxurious and indulgent"),
         ("Generosity", "Reflect on how lucky I am and think about how I can give back to my community"),
-        ("SelfImprovement", "Reflect on what I’ve achieved and set new goals for growth"),
+        ("Self Improvement", "Reflect on what I’ve achieved and set new goals for growth"),
         ("Freedom", "Take a day off to enjoy the freedom to do whatever I want"),
         ("Relationships", "Celebrate with my friends and family"), 
         ("None", "Something else!")
@@ -152,7 +152,7 @@ explanatory_texts = {
     "Convenience": """**Convenience:** You have Convenience as a top money dial! Convenience is all about using money to save yourself time and reduce stress; streamlining your life so you can focus on what matters most. Whether that means taking ride shares instead of transport, ordering food, or hiring a cleaner - you aim to use money to make life as easy as possible.""",
     "Luxury": """**Luxury:** You have Luxury as a top money dial! This means you appreciate high-quality items and experiences, value comfort, elegance, and the finer things in life. Nothing wrong with appreciating beauty in your life and really loving special things. Keep using your money to make your life luxurious!""",
     "Relationships": """**Relationships:** You have Relationships as a top money dial! If relationships are your priority, that means you probably enjoy using money to spend time with your family and friends. Whether hosting a dinner, buying presents for every loved one or using money to help you free up time to see them - you put people above all else.""",
-    "SelfImprovement": """**Self-Improvement:** You have self-improvement as a top money dial! You like to invest in personal growth through education, skills, and tools that help you become the best version of yourself. Incredibly admirable - keep calm and carry on learning & growing!""",
+    "Self Improvement": """**Self-Improvement:** You have self-improvement as a top money dial! You like to invest in personal growth through education, skills, and tools that help you become the best version of yourself. Incredibly admirable - keep calm and carry on learning & growing!""",
     "Health": """**Health & Wellness:** You have health & wellness as a top money dial! You value spending your cash on fitness, nutrition, and mental well-being to support a vibrant, balanced lifestyle. You know better than anyone that if we don’t have our health we don’t have anything. Keep getting those expensive workout classes and treating yourself to new gym clothes!""",
     "Generosity": """**Generosity:** You have generosity as a top money dial!  This means you find fulfilment in giving to others, whether through gifts, donations, or acts of kindness that make a positive impact. This is a lovely way to spend your hard earned money - keep finding ways to give money to causes and people you care about!""",
     "Freedom": """**Freedom:** You have Freedom as a top money dial! The best way to use your money is to buy yourself flexibility, autonomy, and the ability to live life on your own terms. Whether the ability to work your own hours or change jobs as you please you like to be in control of your own time. Keep living free!"""
@@ -192,9 +192,6 @@ if st.session_state.phase == "spending":
 # Page Functions
 # -----------------------------
 
-import streamlit as st
-
-# (Assuming you have your app_header() and quiz_subheader() functions defined.)
 
 def show_quiz():
     """Display the initial quiz page.
@@ -244,13 +241,16 @@ def show_quiz_results():
     
     # Retrieve scores from session state; if not defined, provide an empty dict.
     scores = st.session_state.get("scores", {})
-    
+
     if not scores:
         st.write("No scores found. It appears you have not completed the quiz.")
         return
 
+    # Optionally, remove any None keys (just in case).
+    filtered_scores = {cat: score for cat, score in scores.items() if cat is not None}
+
     # Sort the scores in descending order.
-    sorted_scores = sorted(scores.items(), key=lambda item: item[1], reverse=True)
+    sorted_scores = sorted(filtered_scores.items(), key=lambda item: item[1], reverse=True)
     
     # Get the top three categories with non-zero scores.
     top_categories = [cat for cat, score in sorted_scores if score > 0][:3]
@@ -263,8 +263,8 @@ def show_quiz_results():
     st.markdown(f"## Your top money dial is: **{top_categories[0]}**")
     st.markdown(explanatory_texts.get(top_categories[0], ""))
     
-    # Create a DataFrame from the scores dictionary.
-    data = pd.DataFrame(list(scores.items()), columns=["Money Dial", "Score"])
+    # Create a DataFrame from the filtered scores dictionary.
+    data = pd.DataFrame(list(filtered_scores.items()), columns=["Money Dial", "Score"])
     
     # Create a vertical bar chart with Altair.
     chart = alt.Chart(data).mark_bar(color="#682d24").encode(
