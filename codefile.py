@@ -58,7 +58,7 @@ questions = [
         ("Generosity", "Easy - I love to play host for my friends or family."),
         ("Experiences", "Get to do something cool - like a concert or a play."),
         ("SelfImprovement", "Work on a project; Saturday night crafts has a great ring to it."),
-        ("Freedom", "I like not having a set plan and deciding last minute.")
+        ("Freedom", "I like not having a set plan and deciding last minute."),
         ("None", "I like to do something else!")
     ]),
     ("3. For you, what's the most important thing about travelling?", [
