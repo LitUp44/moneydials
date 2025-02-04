@@ -437,7 +437,7 @@ def show_final_results():
         insight_message = (
             insight_style +
             "<strong>Insight:</strong><br>"
-            "It looks like your you're spending less in the areas you really care about than you wish you were.  "
+            "It looks like you're spending less in the areas you really care about than you wish you were.  "
             "This is a great financial goal to work towards! It may not always be possible, but it's worth thinking about "
             "if you can free up money from somewhere you care about less to be able to spend more on these!"
             "</div>"
