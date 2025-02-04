@@ -49,85 +49,99 @@ def quiz_subheader():
 questions = [
     ("1. When it comes to lunch, what’s your preference?", [
         ("Convenience", "Grab something quick and easy to save time"),
-        ("Experiences", "Try out a new restaurant or café every time"),
+        ("Experiences", "Try out a new spot nearby!"),
         ("Health", "Meal-prep at home so I know it’s healthy"),
-        ("Relationships", "Meet a friend or family member for lunch")
+        ("Relationships", "Doesn't matter as long as I have a friend to eat with!")
+        ("None", "Mmm... none of the above really fits!")
     ]),
     ("2. It’s Saturday night! How do you like to spend it?", [
-        ("Generosity", "I love to host my friends or family."),
-        ("Experiences", "Plan a special experience like a concert."),
-        ("SelfImprovement", "Definitely work on a personal project."),
-        ("Freedom", "I like not having a set plan.")
+        ("Generosity", "Easy - I love to play host for my friends or family."),
+        ("Experiences", "Get to do something cool - like a concert or a play."),
+        ("SelfImprovement", "Work on a project; Saturday night crafts has a great ring to it."),
+        ("Freedom", "I like not having a set plan and deciding last minute.")
+        ("None", "I like to do something else!")
     ]),
-    ("3. How do you feel about traveling?", [
-        ("Travel", "Love it! I want to explore as many places as possible."),
-        ("Freedom", "Always happy with a weekend away to recharge."),
-        ("Health", "Any adventure with lots of hiking or sports works for me!"),
-        ("Luxury", "I love traveling in style and splurging on luxury experiences."),
-        ("Convenience", "Nah, not for me – lots to do at home!")
+    ("3. For you, what's the most important thing about travelling?", [
+        ("Travel", "Getting to go in the first place, I just want to see and experience the world"),
+        ("Freedom", "Knowing I can go where I like, when I like."),
+        ("Health", "The opportunity to be active beyond just going to the gym!"),
+        ("Luxury", "Getting to travel in style and splurging on quality experiences."),
+        ("Convenience", "Making sure everything that can be taken care of for me, is."),
+        ("None", "None of the above"),
     ]),
     ("4. What’s your ideal work environment?", [
-        ("Freedom", "A job that allows me to work my own hours and in whichever location I choose."),
+        ("Freedom", "A job that allows me to work my own hours, in whichever location I choose."),
         ("Relationships", "An office where I can meet new people and network."),
-        ("Travel", "Any job that lets me have long weekends for traveling or the occasional work from abroad."),
-        ("SelfImprovement", "Most important for me is feeling like I’m always improving my skills and developing.")
+        ("Travel", "Any job that lets me have long weekends away or the occasional work from abroad."),
+        ("SelfImprovement", "Anywhere, as long as I’m always learning and developing."),
+        ("None", "None of the above"),
     ]),
-    ("5. How do you approach fitness and health?", [
-        ("Convenience", "Convenience matters—I like online classes or easy workout options that fit my schedule."),
-        ("Health", "I’m happy to invest in a great gym or workout clothing/equipment."),
+    ("5. How do you use money to approach fitness and health?", [
+        ("Convenience", "Convenience matters — I'll pay for options that fit my schedule."),
+        ("Health", "There's no budget when it comes to my health."),
         ("Relationships", "It’s more of a social thing; I love group classes or going with friends!"),
-        ("Experiences", "Fitness isn’t my main focus, but I love splurging on a wellness retreat or trying a new sport now and then.")
+        ("Experiences", "Fitness isn’t my main focus, but I'm usually up to give something new a try."),
+        ("None", "None of these are really 'Me'!")
     ]),
     ("6. What do you spend the most 'splurge' money on every month?", [
-        ("Convenience", "Meal kits to make food easier, being able to take Ubers, someone to help with cleaning or any of the above."),
-        ("Travel", "Flights or trips, even if they’re short – I can’t get enough travel!"),
-        ("Health", "High-quality fitness classes, health foods, or wellness apps."),
-        ("SelfImprovement", "A hobby, course, or app that builds my skills."),
-        ("Experiences", "Doing something new and exciting – I like to explore wherever I am and find something unique to try.")
+        ("Convenience", "Making my life easier - meal kits, Ubers, help with cleaning, or any combo of the above."),
+        ("Travel", "Flights or trips, even if they’re short – I love to get away!"),
+        ("Health", "My health. Gym membership, quality food, workout clothes."),
+        ("SelfImprovement", "My hobbies! I like to invest in things I'm learning / working on."),
+        ("Experiences", "Experiences. I like to use my money to feel I've done soemthing different than usual."),
+        ("None", "Something else!")
     ]),
     ("7. You come across a windfall of cash. What’s your first thought on how to use it?", [
-        ("Luxury", "No question - buy a luxury item I normally can’t afford."),
-        ("Experiences", "Wahoo more money to add to my 'fun' fund for experiences with friends."),
-        ("Freedom", "Straight to the bank! Best thing I can do is have more financial flexibility in the future."),
-        ("Generosity", "Wow - great opportunity to donate part of it to causes I care about!")
+        ("Luxury", "Treat myself! Soemthing boujie I normally can’t afford."),
+        ("Experiences", "Wahoo more money to add to my 'fun' fund."),
+        ("Freedom", "Straight to the bank! It'll go a long way to giving me more financial flexibility!"),
+        ("Generosity", "Wow - great opportunity to donate part of it to causes I care about!"),
+        ("None", "None of these feel right!")
     ]),
     ("8. Which best describes your spending philosophy?", [
-        ("Luxury", "Focus on quality, even if it means spending a lot more."),
-        ("Experiences", "Money is best spent on experiences over stuff. I’ll scrimp unless I get to experience something new."),
-        ("SelfImprovement", "There’s no budget if it’s something that feels like it’s helping me grow and develop."),
-        ("Relationships", "Extra money goes to improving relationships and treating my loved ones."),
-        ("Travel", "Travel. All day. Everyday. I want to see the world.")
+        ("Luxury", "Quality, even if it means spending a lot more."),
+        ("Experiences", "Easy - experiences over stuff."),
+        ("SelfImprovement", "There’s no budget if it helps me learn and grow."),
+        ("Relationships", "I would usually use it to treat my loved ones."),
+        ("Travel", "Straight to the vacation fund."),
+        ("None", "None of these are really 'me'!")
     ]),
     ("9. How do you typically approach learning or personal growth?", [
-        ("SelfImprovement", "I regularly take online courses or attend workshops."),
-        ("Travel", "I travel and experience new cultures to learn more about the world."),
-        ("Health", "I engage in self-care practices or focus on activities that support my mental and physical wellness."),
-        ("Relationships", "I attend networking events and connect with others who have similar goals.")
+        ("SelfImprovement", "I try to carve out the time daily or monthly to learn something new."),
+        ("Travel", "I usually prefer learning about new places, languages or cultures"),
+        ("Health", "I focus on self-care practices and my mental and physical wellness."),
+        ("Relationships", "I learn through people, whether meeting new people or learning from people already in my life."),
+        ("None", "...none of these are quite right"),
     ]),
     ("10. What’s one thing you’re willing to spend more on to treat others?", [
-        ("Generosity", "I love to host dinner or throw a fun party."),
-        ("Relationships", "Giving gifts or doing something special for a loved one."),
-        ("Luxury", "I’ll splurge on a high-end experience or something extravagant for them."),
-        ("Experiences", "Taking people on exciting adventures or trips.")
+        ("Generosity", "Hosting dinner or treating my friends to a night out."),
+        ("Convienence", "Getting them something to make their life easier; a baby-sitter or something they'll actually use."),
+        ("Luxury", "Easy, I’ll splurge on something extravagant for them!"),
+        ("Experiences", "I would usually get something we can do together"),
+        ("None", "Something different!"),
     ]),
     ("11. When it comes to your personal style, what’s most important?", [
         ("Luxury", "The brand – I like to wear pieces that make an impression"),
         ("Convenience", "Comfort and convenience; I don’t like to overthink it"),
         ("Generosity", "Buying things that reflect my values, like eco-friendly or locally made products"),
-        ("Health", "Practicality, I like to be able to walk a lot or go to a workout class in my usual clothes")
+        ("Health", "Practicality, I like to be able to walk a lot or go to a workout class in my usual clothes"), 
+        ("None", "None of these are quite right"),
     ]),
     ("12. If you could improve one area of your life, what would it be?", [
-        ("Convenience", "Freeing up more time for things I enjoy by automating daily tasks"),
+        ("Convenience", "Automate and simplify my life"),
         ("Relationships", "Building stronger connections with friends, family, or a partner"),
         ("Generosity", "Living more generously by giving more time or money to causes I care about"),
-        ("Freedom", "Increasing my ability to travel and explore new places regularly")
+        ("Freedom", "Having more control over my time"), 
+        ("Travel", "Take more vacations, we don't do enough"),
+        ("None", "No none of these are right"),
     ]),
     ("13. What’s your favourite way to celebrate a personal milestone?", [
         ("Luxury", "Treat myself to something luxurious and indulgent"),
-        ("Travel", "Go on an exciting trip or adventure"),
-        ("Generosity", "Host a gathering to share the joy with friends or family"),
+        ("Generosity", "Reflect on how lucky I am and think about how I can give back to my community"),
         ("SelfImprovement", "Reflect on what I’ve achieved and set new goals for growth"),
-        ("Freedom", "Take a day off to enjoy the freedom to do whatever I want")
+        ("Freedom", "Take a day off to enjoy the freedom to do whatever I want"),
+        ("Relationships", "Celebrate with my friends and family"), 
+        ("None", "Something else!")
     ])
 ]
 
@@ -156,11 +170,12 @@ if "phase" not in st.session_state:
 
 if st.session_state.phase == "quiz":
     if "current_question" not in st.session_state:
-        st.session_state.current_question = 0
-    if "scores" not in st.session_state:
-        # Initialize scores for every possible category.
-        all_categories = { answer[0] for _, answers in questions for answer in answers }
-        st.session_state.scores = {cat: 0 for cat in all_categories}
+    st.session_state.current_question = 0
+if "scores" not in st.session_state:
+    # Gather all categories (ignore None values).
+    all_categories = {cat for _, answers in questions for cat, _ in answers if cat is not None}
+    st.session_state.scores = {cat: 0 for cat in all_categories}
+
 
 # For spending input pages:
 if st.session_state.phase == "spending":
@@ -203,26 +218,24 @@ def show_quiz():
     # If quiz has started, only display the header (no subheader) and then the quiz questions.
     # (Here we assume the quiz questions are managed via st.session_state.current_question.)
     if st.session_state.current_question < len(questions):
-        # Display the current quiz question.
         question_text, answers = questions[st.session_state.current_question]
         st.markdown(f"### {question_text}")
         options = [answer_text for _, answer_text in answers]
         choice = st.radio("Select your answer:", options, key=f"question_{st.session_state.current_question}")
         if st.button("Next"):
-            # Update the score for the selected answer.
+            # Only update score if the answer has a valid category.
             for cat, answer_text in answers:
                 if answer_text == choice:
-                    st.session_state.scores[cat] += 1
+                    if cat is not None:  # Do nothing for 'Not applicable'
+                        st.session_state.scores[cat] += 1
                     break
             st.session_state.current_question += 1
-            st.rerun()
+            st.experimental_rerun()
     else:
-        # All questions answered, move on to the results phase.
-        show_quiz_results()
+        st.write("Quiz finished!")
+        st.write("Scores:", st.session_state.scores)
 
-import pandas as pd
-import altair as alt
-import streamlit as st
+show_quiz()
 
 def show_quiz_results():
     """Display the quiz results with the top money dial, a vertical bar chart of all scores,
