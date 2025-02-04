@@ -418,7 +418,7 @@ def show_final_results():
     
     st.altair_chart(chart, use_container_width=True)
     
-      # ----- New Insight Calculation -----
+         # ----- New Insight Calculation -----
     # Count how many top money dials have ideal spending greater than actual spending.
     count_ideal_gt_actual = 0
     for dial in st.session_state.top_dials:
@@ -427,42 +427,32 @@ def show_final_results():
         if ideal > actual:
             count_ideal_gt_actual += 1
     
-    # Define the CSS style for the insight message.
-    insight_style = """
-        <div style="
-            background-color: #e0f7fa; 
-            padding: 15px; 
-            border-radius: 5px; 
-            font-size: 20px;
-            line-height: 1.5;
-            margin-bottom: 20px;">
-    """
+    # Define the CSS style and HTML for the insight message.
+    insight_style = (
+        '<div style="background-color: #e0f7fa; padding: 15px; border-radius: 5px; '
+        'font-size: 20px; line-height: 1.5; margin-bottom: 20px;">'
+    )
     
-    # Display the appropriate insight message based on the count.
     if count_ideal_gt_actual >= 2:
-        st.markdown(
+        insight_message = (
             insight_style +
-            """
-            <strong>Insight:</strong><br>
-            It looks like the amount you're actually spending is less than you would like to on your TOP money dials! 
-            This is a great financial goal to work towards! It may not always be possible, but it's worth thinking about 
-            if you can free up money from somewhere you care about less to be able to spend more on these!
-            </div>
-            """,
-            unsafe_allow_html=True
+            "<strong>Insight:</strong><br>"
+            "It looks like your ideal spending on your top money dials is more than how much you currently are.  "
+            "This is a great financial goal to work towards! It may not always be possible, but it's worth thinking about "
+            "if you can free up money from somewhere you care about less to be able to spend more on these!"
+            "</div>"
         )
     else:
-        st.markdown(
+        insight_message = (
             insight_style +
-            """
-            <strong>Insight:</strong><br>
-            Wow - it looks like you already spend as much or more than you would like to on your top money dials!  
-            This is great, the goal is to get maximum satisfaction from your money and feel like you're able to really 
-            spend on the things you love.
-            </div>
-            """,
-            unsafe_allow_html=True
+            "<strong>Insight:</strong><br>"
+            "Wow - it looks like you already spend as much or more than you would like to on your top money dials!  "
+            "This is great, the goal is to get maximum satisfaction from your money and feel like you're able to really "
+            "spend on the things you love."
+            "</div>"
         )
+    
+    st.markdown(insight_message, unsafe_allow_html=True)
     
     # Display a horizontal rule.
     st.markdown("___")
