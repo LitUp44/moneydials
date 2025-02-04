@@ -247,7 +247,7 @@ def show_quiz_results():
         return
 
     # Optionally, remove any None keys (just in case).
-    filtered_scores = {cat: score for cat, score in scores.items() if cat is not None}
+    filtered_scores = {cat: score for cat, score in scores.items() if cat is not "None"}
 
     # Sort the scores in descending order.
     sorted_scores = sorted(filtered_scores.items(), key=lambda item: item[1], reverse=True)
