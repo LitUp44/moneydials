@@ -170,7 +170,7 @@ if "phase" not in st.session_state:
 
 if st.session_state.phase == "quiz":
     if "current_question" not in st.session_state:
-    st.session_state.current_question = 0
+        st.session_state.current_question = 0
 if "scores" not in st.session_state:
     # Gather all categories (ignore None values).
     all_categories = {cat for _, answers in questions for cat, _ in answers if cat is not None}
