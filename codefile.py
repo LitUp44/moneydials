@@ -502,16 +502,6 @@ def show_final_results():
     
     if st.button("Send Email"):
         send_results_via_google_app_script(user_email, email_subject, email_body)
-    
-    # Display the reference image.
-    st.subheader("Reference")
-    st.image("MoneyDials2.png", caption="Reference Image", width=700)
-    
-    # Optional: A button to restart the entire app.
-    if st.button("Restart All"):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
-        st.experimental_rerun()
 
     
     # Display the reference image.
