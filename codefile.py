@@ -389,7 +389,7 @@ def send_results_via_google_app_script(recipient_email, subject, html_body):
         if response_data.get("status") == "success":
             st.success("Email sent successfully!")
         else:
-            st.error("Error sending email: " + response_data.get("message", "Unknown error"))
+            st.error(f"Error sending email: {response_data.get('message', 'Unknown error')}")
     except Exception as e:
         st.error(f"An exception occurred: {e}")
 
