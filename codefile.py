@@ -67,7 +67,7 @@ questions = [
         ("Health", "The opportunity to be active beyond just going to the gym"),
         ("Luxury", "Getting to travel in style and splurging on quality experiences"),
         ("Convenience", "Making sure everything that can be taken care of for me, is"),
-        ("Generosity", "The opportunity to appreciate how lucky I am, and try to give back to the communities I visit")
+        ("Generosity", "The opportunity to appreciate how lucky I am, and try to give back to the communities I visit"),
         ("None", "None of the above"),
     ]),
     ("4. What’s your ideal work environment?", [
