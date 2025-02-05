@@ -48,75 +48,76 @@ def quiz_subheader():
 # Each answer is a tuple: (category, answer_text)
 questions = [
     ("1. When it comes to lunch, what’s your preference?", [
-        ("Convenience", "Grab something quick and easy to save time"),
-        ("Experiences", "Try out a new spot nearby!"),
-        ("Health", "Meal-prep at home so I know it’s healthy"),
-        ("Relationships", "Doesn't matter as long as I have a friend to eat with!"),
-        ("None", "Mmm... none of the above really fits!")
+        ("Convenience", "Grab something quick and easy"),
+        ("Experiences", "Try out a new spot nearby"),
+        ("Health", "Salad or something healthy"),
+        ("Relationships", "Doesn't matter as long as I have a friend to eat with"),
+        ("None", "None of the above really fits")
     ]),
     ("2. It’s Saturday night! How do you like to spend it?", [
-        ("Generosity", "Easy - I love to play host for my friends or family."),
-        ("Experiences", "Get to do something cool - like a concert or a play."),
-        ("Self Improvement", "Work on a project; Saturday night crafts has a great ring to it."),
-        ("Freedom", "I like not having a set plan and deciding last minute."),
-        ("None", "I like to do something else!")
+        ("Generosity", "I love to play host for my friends or family"),
+        ("Experiences", "Do something cool - like a concert or a play"),
+        ("Self Improvement", "Work on a project; 'Saturday night crafts' has a great ring to it"),
+        ("Freedom", "I like not having a set plan and deciding last minute"),
+        ("None", "None of the above")
     ]),
     ("3. For you, what's the most important thing about travelling?", [
         ("Travel", "Getting to go in the first place, I just want to see and experience the world"),
-        ("Freedom", "Knowing I can go where I like, when I like."),
-        ("Health", "The opportunity to be active beyond just going to the gym!"),
-        ("Luxury", "Getting to travel in style and splurging on quality experiences."),
-        ("Convenience", "Making sure everything that can be taken care of for me, is."),
+        ("Freedom", "Knowing I can go where I like, when I like"),
+        ("Health", "The opportunity to be active beyond just going to the gym"),
+        ("Luxury", "Getting to travel in style and splurging on quality experiences"),
+        ("Convenience", "Making sure everything that can be taken care of for me, is"),
+        ("Generosity", "The opportunity to appreciate how lucky I am, and try to give back to the communities I visit")
         ("None", "None of the above"),
     ]),
     ("4. What’s your ideal work environment?", [
-        ("Freedom", "A job that allows me to work my own hours, in whichever location I choose."),
-        ("Relationships", "An office where I can meet new people and network."),
-        ("Travel", "Any job that lets me have long weekends away or the occasional work from abroad."),
-        ("Self Improvement", "Anywhere, as long as I’m always learning and developing."),
+        ("Freedom", "A job that allows me to work my own hours, in whichever location I choose"),
+        ("Relationships", "An office where I can meet new people and network"),
+        ("Travel", "Any job that lets me have long weekends away or the occasional work from abroad"),
+        ("Self Improvement", "Anywhere, as long as I’m always learning and developing"),
         ("None", "None of the above"),
     ]),
     ("5. How do you use money to approach fitness and health?", [
-        ("Convenience", "Convenience matters — I'll pay for options that fit my schedule."),
-        ("Health", "There's no budget when it comes to my health."),
-        ("Relationships", "It’s more of a social thing; I love group classes or going with friends!"),
-        ("Experiences", "Fitness isn’t my main focus, but I'm usually up to give something new a try."),
-        ("None", "None of these are really 'Me'!")
+        ("Convenience", "Convenience matters — I'll pay for options that fit my schedule"),
+        ("Health", "There's no budget when it comes to my health"),
+        ("Relationships", "It’s more of a social thing; I like group classes or going with friends"),
+        ("Experiences", "Fitness isn’t my main focus, but I'm usually up to give something new a try!"),
+        ("None", "None of these are really 'Me'")
     ]),
     ("6. What do you spend the most 'splurge' money on every month?", [
-        ("Convenience", "Making my life easier - meal kits, Ubers, help with cleaning, or any combo of the above."),
-        ("Travel", "Flights or trips, even if they’re short – I love to get away!"),
-        ("Health", "My health. Gym membership, quality food, workout clothes."),
-        ("Self Improvement", "My hobbies! I like to invest in things I'm learning / working on."),
-        ("Experiences", "Experiences. I like to use my money to feel I've done soemthing different than usual."),
-        ("None", "Something else!")
+        ("Convenience", "Making my life easier - meal kits, Ubers, help with cleaning, or any combo of the above"),
+        ("Travel", "Flights or trips, even if they’re short – I like to get away"),
+        ("Health", "My health. A gym membership, quality food, workout clothes"),
+        ("Self Improvement", "My hobbies! I like to invest in things I'm learning / working on"),
+        ("Experiences", "Experiences. I like to use my money to feel I've done something different than usual"),
+        ("None", "None of these would be right for me")
     ]),
     ("7. You come across a windfall of cash. What’s your first thought on how to use it?", [
-        ("Luxury", "Treat myself! Soemthing boujie I normally can’t afford."),
-        ("Experiences", "Wahoo more money to add to my 'fun' fund."),
-        ("Freedom", "Straight to the bank! It'll go a long way to giving me more financial flexibility!"),
+        ("Luxury", "Treat myself! Soemthing boujie I normally can’t afford"),
+        ("Experiences", "Wahoo more money to add to my 'fun' fund"),
+        ("Freedom", "Straight to the bank! It'll go a long way to giving me more financial flexibility"),
         ("Generosity", "Wow - great opportunity to donate part of it to causes I care about!"),
-        ("None", "None of these feel right!")
+        ("None", "None of these feel right")
     ]),
     ("8. Which best describes your spending philosophy?", [
-        ("Luxury", "Quality, even if it means spending a lot more."),
-        ("Experiences", "Easy - experiences over stuff."),
-        ("Self Improvement", "There’s no budget if it helps me learn and grow."),
-        ("Relationships", "I would usually use it to treat my loved ones."),
-        ("Travel", "Straight to the vacation fund."),
+        ("Luxury", "Quality, even if it means spending a lot more"),
+        ("Experiences", "Experiences over stuff"),
+        ("Self Improvement", "There’s no budget if it helps me learn and grow"),
+        ("Relationships", "I would usually use it to treat my loved ones"),
+        ("Travel", "Straight to the vacation fund"),
         ("None", "None of these are really 'me'!")
     ]),
     ("9. How do you typically approach learning or personal growth?", [
-        ("Self Improvement", "I try to carve out the time daily or monthly to learn something new."),
+        ("Self Improvement", "I try to carve out the time daily or monthly to learn something new"),
         ("Travel", "I usually prefer learning about new places, languages or cultures"),
-        ("Health", "I focus on self-care practices and my mental and physical wellness."),
-        ("Relationships", "I learn through people, whether meeting new people or learning from people already in my life."),
+        ("Health", "I focus on self-care practices and my mental and physical wellness"),
+        ("Relationships", "I learn through people, whether meeting new people or learning from people already in my life"),
         ("None", "...none of these are quite right"),
     ]),
     ("10. What’s one thing you’re willing to spend more on to treat others?", [
-        ("Generosity", "Hosting dinner or treating my friends to a night out."),
-        ("Convenience", "Getting them something to make their life easier; a baby-sitter or something they'll actually use."),
-        ("Luxury", "Easy, I’ll splurge on something extravagant for them!"),
+        ("Generosity", "Hosting dinner or treating my friends to a night out"),
+        ("Convenience", "Getting them something to make their life easier; a baby-sitter or something they'll actually use"),
+        ("Luxury", "I’ll splurge on something extravagant for them!"),
         ("Experiences", "I would usually get something we can do together"),
         ("None", "Something different!"),
     ]),
@@ -137,8 +138,7 @@ questions = [
     ]),
     ("13. What’s your favourite way to celebrate a personal milestone?", [
         ("Luxury", "Treat myself to something luxurious and indulgent"),
-        ("Generosity", "Reflect on how lucky I am and think about how I can give back to my community"),
-        ("Self Improvement", "Reflect on what I’ve achieved and set new goals for growth"),
+        ("Self Improvement", "Gratitude - personal achievement is important to me and I like to take a moment to appreciate my growth"),
         ("Freedom", "Take a day off to enjoy the freedom to do whatever I want"),
         ("Relationships", "Celebrate with my friends and family"), 
         ("None", "Something else!")
