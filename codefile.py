@@ -457,26 +457,50 @@ def show_final_results():
     # Display a horizontal rule.
     st.markdown("___")
 
-    # After showing the results:
+import requests
+import json
+import streamlit as st
+
+def send_results_via_google_app_script(recipient_email, subject, html_body):
+    # Replace with your actual Google Apps Script URL
+    web_app_url = "https://script.google.com/macros/s/AKfycbw4mMc-fBfc1r6DBgP3nwEKdycuZufUGjm8sUAr89PGfYcYVKDHAjKzvT3W_wbRMeVq/exec"
+    
+    # Create the payload
+    payload = {
+        "email": recipient_email,
+        "subject": subject,
+        "body": html_body
+    }
+    
+    # Send a POST request to the web app
+    try:
+        response = requests.post(web_app_url, data=json.dumps(payload))
+        response_data = response.json()
+        
+        if response_data.get("status") == "success":
+            st.success("Email sent successfully!")
+        else:
+            st.error("Error sending email: " + response_data.get("message", "Unknown error"))
+    except Exception as e:
+        st.error(f"An exception occurred: {e}")
+
+    # Usage in your final results page
     st.markdown("### Get a copy of your results by email:")
     user_email = st.text_input("Enter your email address:")
     if st.button("Send Email"):
-        # Build your email message. You can include results, charts (as links or attachments), etc.
         email_subject = "Your Money Dial Results"
-        email_message = f"""
+        email_body = f"""
         <html>
-            <body>
-                <h2>Your Money Dial Results</h2>
-                <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
-                <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
-                <!-- Add more details or even embed images if available -->
-                <hr>
-                <p>Thank you for taking the quiz!</p>
-            </body>
+          <body>
+            <h2>Your Money Dial Results</h2>
+            <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
+            <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
+            <hr>
+            <p>Thank you for taking the quiz!</p>
+          </body>
         </html>
         """
-        send_results_email(user_email, email_subject, email_message)
-        st.success("Your results have been emailed!")
+        send_results_via_google_app_script(user_email, email_subject, email_body)
     
     # Display the reference image.
     st.subheader("Reference")
