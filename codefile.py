@@ -374,7 +374,7 @@ import pandas as pd
 
 def send_results_via_google_app_script(recipient_email, subject, html_body):
     # Replace with your actual Google Apps Script URL
-    web_app_url = "https://script.google.com/macros/s/AKfycbw4mMc-fBfc1r6DBgP3nwEKdycuZufUGjm8sUAr89PGfYcYVKDHAjKzvT3W_wbRMeVq/exec"
+    web_app_url = "https://script.google.com/macros/s/AKfycbxID5fekXrNlhYSaWOI1HBuz8I2MgB-QBjdDk1DXu3SueMDusMbX8ARffs7Xxl2kR_z/exec"
     
     payload = {
         "email": recipient_email,
