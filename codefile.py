@@ -366,10 +366,37 @@ def show_spending_input():
                 st.session_state.phase = "final"
             st.rerun()
 
+import requests
+import json
+import streamlit as st
+import altair as alt
+import pandas as pd
+
+def send_results_via_google_app_script(recipient_email, subject, html_body):
+    # Replace with your actual Google Apps Script URL
+    web_app_url = "https://script.google.com/macros/s/AKfycbw4mMc-fBfc1r6DBgP3nwEKdycuZufUGjm8sUAr89PGfYcYVKDHAjKzvT3W_wbRMeVq/exec"
+    
+    payload = {
+        "email": recipient_email,
+        "subject": subject,
+        "body": html_body
+    }
+    
+    try:
+        response = requests.post(web_app_url, data=json.dumps(payload))
+        response_data = response.json()
+        
+        if response_data.get("status") == "success":
+            st.success("Email sent successfully!")
+        else:
+            st.error("Error sending email: " + response_data.get("message", "Unknown error"))
+    except Exception as e:
+        st.error(f"An exception occurred: {e}")
+
 def show_final_results():
     """Display the final summary page with a grouped bar chart for the top 3 money dials,
     a custom explanatory message including insights based on spending differences,
-    a horizontal rule, and a reference image."""
+    a horizontal rule, an email input, and a reference image."""
     
     # Display the persistent header.
     app_header()
@@ -394,7 +421,7 @@ def show_final_results():
     chart = alt.Chart(df).mark_bar().encode(
         x=alt.X("Money Dial:N", 
                 title="Money Dial", 
-                sort=st.session_state.top_dials,  # Use the explicit order from session state.
+                sort=st.session_state.top_dials,
                 axis=alt.Axis(grid=False)
         ),
         xOffset=alt.X("Allocation:N", title="Allocation"),
@@ -418,8 +445,7 @@ def show_final_results():
     
     st.altair_chart(chart, use_container_width=True)
     
-         # ----- New Insight Calculation -----
-    # Count how many top money dials have ideal spending greater than actual spending.
+    # ----- New Insight Calculation -----
     count_ideal_gt_actual = 0
     for dial in st.session_state.top_dials:
         ideal = st.session_state.spending_data[dial]["ideal"]
@@ -427,7 +453,6 @@ def show_final_results():
         if ideal > actual:
             count_ideal_gt_actual += 1
     
-    # Define the CSS style and HTML for the insight message.
     insight_style = (
         '<div style="background-color: #ff9e70; padding: 15px; border-radius: 5px; '
         'font-size: 20px; line-height: 1.5; margin-bottom: 20px;">'
@@ -456,51 +481,38 @@ def show_final_results():
     
     # Display a horizontal rule.
     st.markdown("___")
-
-import requests
-import json
-import streamlit as st
-
-def send_results_via_google_app_script(recipient_email, subject, html_body):
-    # Replace with your actual Google Apps Script URL
-    web_app_url = "https://script.google.com/macros/s/AKfycbw4mMc-fBfc1r6DBgP3nwEKdycuZufUGjm8sUAr89PGfYcYVKDHAjKzvT3W_wbRMeVq/exec"
     
-    # Create the payload
-    payload = {
-        "email": recipient_email,
-        "subject": subject,
-        "body": html_body
-    }
-    
-    # Send a POST request to the web app
-    try:
-        response = requests.post(web_app_url, data=json.dumps(payload))
-        response_data = response.json()
-        
-        if response_data.get("status") == "success":
-            st.success("Email sent successfully!")
-        else:
-            st.error("Error sending email: " + response_data.get("message", "Unknown error"))
-    except Exception as e:
-        st.error(f"An exception occurred: {e}")
-
-    # Usage in your final results page
+    # ----- Email Section -----
     st.markdown("### Get a copy of your results by email:")
     user_email = st.text_input("Enter your email address:")
+    
+    # Prepare email subject and message.
+    email_subject = "Your Money Dial Results"
+    email_body = f"""
+    <html>
+      <body>
+        <h2>Your Money Dial Results</h2>
+        <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
+        <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
+        <hr>
+        <p>Thank you for taking the quiz!</p>
+      </body>
+    </html>
+    """
+    
     if st.button("Send Email"):
-        email_subject = "Your Money Dial Results"
-        email_body = f"""
-        <html>
-          <body>
-            <h2>Your Money Dial Results</h2>
-            <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
-            <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
-            <hr>
-            <p>Thank you for taking the quiz!</p>
-          </body>
-        </html>
-        """
         send_results_via_google_app_script(user_email, email_subject, email_body)
+    
+    # Display the reference image.
+    st.subheader("Reference")
+    st.image("MoneyDials2.png", caption="Reference Image", width=700)
+    
+    # Optional: A button to restart the entire app.
+    if st.button("Restart All"):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.experimental_rerun()
+
     
     # Display the reference image.
     st.subheader("Reference")
