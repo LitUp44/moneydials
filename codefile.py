@@ -511,39 +511,6 @@ def send_results_via_google_app_script(recipient_email, subject, html_body):
         for key in list(st.session_state.keys()):
             del st.session_state[key]
         st.rerun()
-    
-
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import os
-
-def send_results_email(user_email, subject, message):
-    # Set up your SMTP server details
-    smtp_server = "smtp.gmail.com"
-    smtp_port = 587  # For TLS
-    sender_email = os.getenv("heather.litwiller@alignedfinances.com")  # Your email address from env variables
-    sender_password = os.getenv("Tobintoo2*")  # Your email password or app password
-
-    # Create a MIME message
-    msg = MIMEMultipart()
-    msg["From"] = sender_email
-    msg["To"] = user_email
-    msg["Subject"] = subject
-
-    # Attach the HTML or plain text message
-    msg.attach(MIMEText(message, "html"))  # You can use "plain" for plain text
-
-    try:
-        # Connect to the server and send the email
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()  # Secure the connection
-        server.login(sender_email, sender_password)
-        server.send_message(msg)
-        server.quit()
-        print("Email sent successfully!")
-    except Exception as e:
-        print("Error sending email:", e)
 
 # -----------------------------
 # Main App Logic (Page Flow)
