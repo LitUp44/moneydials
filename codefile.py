@@ -483,25 +483,25 @@ def show_final_results():
     st.markdown("___")
     
     # ----- Email Section -----
-    st.markdown("### Get a copy of your results by email:")
-    user_email = st.text_input("Enter your email address:")
+    # st.markdown("### Get a copy of your results by email:")
+    # user_email = st.text_input("Enter your email address:")
     
     # Prepare email subject and message.
-    email_subject = "Your Money Dial Results"
-    email_body = f"""
-    <html>
-      <body>
-        <h2>Your Money Dial Results</h2>
-        <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
-        <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
-        <hr>
-        <p>Thank you for taking the quiz!</p>
-      </body>
-    </html>
-    """
+    # email_subject = "Your Money Dial Results"
+    # email_body = f"""
+    # <html>
+     #  <body>
+      #   <h2>Your Money Dial Results</h2>
+       #  <p>Top Money Dial: {st.session_state.top_dials[0]}</p>
+       #  <p>Other top money dials: {" ,".join(st.session_state.top_dials[1:])}</p>
+       #  <hr>
+        # <p>Thank you for taking the quiz!</p>
+     #  </body>
+    # </html>
+    # """
     
-    if st.button("Send Email"):
-        send_results_via_google_app_script(user_email, email_subject, email_body)
+   #  if st.button("Send Email"):
+   #      send_results_via_google_app_script(user_email, email_subject, email_body)
 
     
     # Display the reference image.
